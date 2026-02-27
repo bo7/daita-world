@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal — DAITA-CRAFTER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue:#0078d4;--blue-dark:#005a9e;--green:#0e7a45;--red:#c0392b;--bg:#f7fbff;--surface:#fff;--border:#d0e4f4;--text:#0a1628;--text-2:#1e3a5f;--text-3:#4a6580;--text-4:#8fafc8; }
+    body { font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh; }
+    #gate { display:flex;align-items:center;justify-content:center;min-height:100vh; }
+    #app { display:none; }
+
+    nav { background:var(--text-2);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between; }
+    .brand { font-size:13px;font-weight:700;letter-spacing:0.12em;color:white; }
+    .nav-right { display:flex;gap:16px;align-items:center;font-size:13px;color:#8fafc8; }
+    .nav-right a { color:#8fafc8;text-decoration:none; }
+    .nav-right a:hover { color:white; }
+
+    .container { max-width:960px;margin:0 auto;padding:56px 32px; }
+    .greeting { font-family:'Instrument Serif',serif;font-size:32px;color:var(--text-2);margin-bottom:8px; }
+    .greeting-sub { font-size:14px;color:var(--text-4);margin-bottom:56px; }
+
+    .section-label { font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--text-4);margin-bottom:16px; }
+    .cards { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:48px; }
+    .card { background:var(--surface);border:1px solid var(--border);padding:28px; }
+    .card-icon { font-size:28px;margin-bottom:16px; }
+    .card-title { font-size:16px;font-weight:700;color:var(--text-2);margin-bottom:8px; }
+    .card-desc { font-size:13px;color:var(--text-3);line-height:1.6;margin-bottom:20px; }
+
+    .btn { display:inline-block;padding:10px 20px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:none;text-decoration:none;letter-spacing:0.03em; }
+    .btn-primary { background:var(--blue);color:white; }
+    .btn-primary:hover:not(:disabled) { background:var(--blue-dark); }
+    .btn-primary:disabled { background:var(--border);color:var(--text-4);cursor:not-allowed; }
+    .btn-outline { background:transparent;color:var(--blue);border:1px solid var(--border); }
+    .btn-outline:hover { border-color:var(--blue); }
+    .btn-green { background:var(--green);color:white; }
+    .btn-green:hover:not(:disabled) { background:#0a5c33; }
+    .btn-green:disabled { background:var(--border);color:var(--text-4);cursor:not-allowed; }
+    .btn-sm { padding:7px 14px;font-size:12px; }
+
+    /* CV Translator */
+    .translator-box { background:var(--surface);border:1px solid var(--border);padding:32px;margin-bottom:48px; }
+    .translator-box h2 { font-size:18px;font-weight:700;color:var(--text-2);margin-bottom:6px; }
+    .translator-box p { font-size:13px;color:var(--text-4);margin-bottom:28px;line-height:1.6; }
+    .trans-controls { display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px; }
+    .trans-field { display:flex;flex-direction:column;gap:6px;flex:1;min-width:200px; }
+    .field-label { font-size:11px;font-weight:600;letter-spacing:0.09em;color:var(--text-4); }
+    select { border:1px solid var(--border);padding:10px 12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--bg);outline:none;width:100%; }
+    select:focus { border-color:var(--blue);background:var(--surface); }
+    .trans-log { background:var(--bg);border:1px solid var(--border);padding:16px;font-size:12px;font-family:monospace;line-height:1.8;color:var(--text-3);min-height:60px;display:none; }
+    .trans-log.visible { display:block; }
+    .progress-bar { height:4px;background:var(--border);margin:12px 0; }
+    .progress-fill { height:100%;background:var(--green);transition:width 0.3s;width:0%; }
+
+    .spinner { display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .coming-soon { display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.08em;background:#f0f6fd;color:var(--blue);padding:3px 8px;vertical-align:middle;margin-left:8px; }
+
+    .gate-box { background:var(--surface);border:1px solid var(--border);padding:48px;max-width:440px;width:100%;text-align:center; }
+    .gate-box h2 { font-size:20px;font-weight:700;color:var(--text-2);margin-bottom:8px; }
+    .gate-box p { font-size:13px;color:var(--text-4);margin-bottom:28px; }
+  </style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-box">
+    <div style="font-size:13px;font-weight:700;letter-spacing:0.12em;color:var(--text-4);margin-bottom:24px;">DAITA-CRAFTER</div>
+    <h2>Zugang erforderlich</h2>
+    <p>Dieser Bereich ist nur für registrierte Nutzer zugänglich.</p>
+    <a href="/login.html" class="btn btn-primary" style="display:block;text-align:center;margin-bottom:12px;">Anmelden</a>
+    <a href="/register.html" class="btn btn-outline" style="display:block;text-align:center;">Registrieren</a>
+  </div>
+</div>
+
+<div id="app">
+  <nav>
+    <span class="brand">DAITA-CRAFTER</span>
+    <div class="nav-right">
+      <span id="nav-name"></span>
+      <a href="/translate.html">Übersetzer</a>
+      <a href="/cms.html">CMS</a>
+      <a href="#" onclick="doLogout()">Abmelden</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="greeting" id="greeting">Willkommen</div>
+    <div class="greeting-sub">Ihr persönlicher Bereich bei DAITA-CRAFTER</div>
+
+    <!-- CV Downloads -->
+    <div class="section-label">LEBENSLAUF — DIREKTER DOWNLOAD</div>
+    <div class="cards" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <div class="card-title">Lebenslauf Deutsch</div>
+        <div class="card-desc">Vollständiger Lebenslauf von Sven Bohnstedt als PDF — Deutsche Version.</div>
+        <a href="/cv/sven-bohnstedt-cv-de.pdf" download class="btn btn-primary">DE herunterladen</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <div class="card-title">Curriculum Vitae English</div>
+        <div class="card-desc">Complete curriculum vitae of Sven Bohnstedt as PDF — English version.</div>
+        <a href="/cv/sven-bohnstedt-cv-en.pdf" download class="btn btn-primary">Download EN</a>
+      </div>
+    </div>
+
+    <!-- CV Translator -->
+    <div class="translator-box">
+      <h2>CV in beliebige Sprache übersetzen</h2>
+      <p>Qwen3 übersetzt den Lebenslauf on-the-fly in Ihre gewünschte Sprache und stellt ihn als Download bereit. Der Vorgang dauert je nach Sprache 1–3 Minuten.</p>
+
+      <div class="trans-controls">
+        <div class="trans-field">
+          <div class="field-label">QUELL-CV</div>
+          <select id="cv-source">
+            <option value="de">Lebenslauf DE</option>
+            <option value="en">CV EN</option>
+          </select>
+        </div>
+        <div class="trans-field">
+          <div class="field-label">ZIELSPRACHE</div>
+          <select id="cv-target">
+            <option value="">Lade Sprachen...</option>
+          </select>
+        </div>
+        <div>
+          <button class="btn btn-green" id="trans-btn" onclick="translateCV()" disabled>
+            CV übersetzen
+          </button>
+        </div>
+      </div>
+
+      <div class="progress-bar" id="trans-progress" style="display:none;">
+        <div class="progress-fill" id="trans-fill"></div>
+      </div>
+      <div class="trans-log" id="trans-log"></div>
+      <div id="trans-result" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="section-label">WEITERE FUNKTIONEN <span class="coming-soon">DEMNÄCHST</span></div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">📅</div>
+        <div class="card-title">Termin vereinbaren</div>
+        <div class="card-desc">Direktbuchung eines Kennenlerngesprächs — 45 Minuten, kostenlos, ohne Verpflichtung.</div>
+        <button class="btn btn-outline" disabled>Bald verfügbar</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤝</div>
+        <div class="card-title">Teams Meeting</div>
+        <div class="card-desc">Direkte Einladung zu einem Microsoft Teams Meeting — auf Wunsch mit Agenda.</div>
+        <button class="btn btn-outline" disabled>Bald verfügbar</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">Digitaler Assistent</div>
+        <div class="card-desc">Fragen zu Projekten, Technologien, Verfügbarkeit — beantwortet von einem KI-Assistenten.</div>
+        <button class="btn btn-outline" disabled>Bald verfügbar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://imuhzzxnkrmiwlccraff.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltdWh6enhua3JtaXdsY2NyYWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5MDE0ODEsImV4cCI6MjA4NzQ3NzQ4MX0.zsrIn4g53_5raGUmxTuIu68KX9AmsWOic70uXa8Hrqk';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    const name = session.user.user_metadata?.full_name || session.user.email;
+    document.getElementById('greeting').textContent = `Willkommen, ${name.split(' ')[0]}`;
+    document.getElementById('nav-name').textContent = name;
+    loadLanguages();
+  } else {
+    document.getElementById('gate').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
+
+async function doLogout() {
+  await sb.auth.signOut();
+  location.href = '/login.html';
+}
+
+async function loadLanguages() {
+  const sel = document.getElementById('cv-target');
+  try {
+    const res = await fetch('/api/languages');
+    const langs = await res.json();
+    sel.innerHTML = langs
+      .filter(l => !['de','en'].includes(l.code))
+      .map(l => `<option value="${l.code}">${l.native} (${l.code.toUpperCase()})</option>`)
+      .join('');
+    document.getElementById('trans-btn').disabled = false;
+  } catch {
+    sel.innerHTML = '<option value="fr">Français (FR)</option><option value="es">Español (ES)</option><option value="nl">Nederlands (NL)</option>';
+    document.getElementById('trans-btn').disabled = false;
+  }
+}
+
+async function translateCV() {
+  const sourceLang = document.getElementById('cv-source').value;
+  const targetLang = document.getElementById('cv-target').value;
+  if (!targetLang) return;
+
+  const btn = document.getElementById('trans-btn');
+  const log = document.getElementById('trans-log');
+  const result = document.getElementById('trans-result');
+  const progress = document.getElementById('trans-progress');
+  const fill = document.getElementById('trans-fill');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Übersetze...';
+  log.className = 'trans-log visible';
+  log.textContent = '';
+  result.innerHTML = '';
+  progress.style.display = 'block';
+  fill.style.width = '5%';
+
+  function addLog(msg) {
+    log.textContent += msg + '\n';
+    log.scrollTop = log.scrollHeight;
+  }
+
+  try {
+    const cvPath = `/cv/sven-bohnstedt-cv-${sourceLang}.pdf`;
+    addLog(`Lade CV (${sourceLang.toUpperCase()})...`);
+    fill.style.width = '15%';
+
+    // Fetch PDF as base64
+    const pdfRes = await fetch(cvPath);
+    if (!pdfRes.ok) throw new Error(`CV nicht gefunden: ${cvPath}`);
+    const pdfBlob = await pdfRes.blob();
+
+    // Extract text from PDF using pdfjs via our existing infrastructure
+    // We send the PDF to the bridge which extracts text, translates, returns text
+    addLog(`PDF geladen (${Math.round(pdfBlob.size/1024)} KB). Extrahiere Text...`);
+    fill.style.width = '30%';
+
+    // Convert to base64
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(pdfBlob);
+    });
+
+    addLog(`Sende an Qwen3 zur Übersetzung nach ${targetLang.toUpperCase()}...`);
+    fill.style.width = '45%';
+
+    const res = await fetch('/api/translate-cv', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pdfBase64: base64, sourceLang, targetLang })
+    });
+
+    fill.style.width = '85%';
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Übersetzungsfehler');
+    }
+
+    const data = await res.json();
+    fill.style.width = '100%';
+    addLog(`Übersetzung abgeschlossen (${data.model}).`);
+
+    // Create downloadable text file
+    const blob = new Blob([data.translated], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    result.innerHTML = `
+      <div style="background:#e8f8ef;border:1px solid #a3d9b8;padding:16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:13px;color:var(--green);font-weight:600;">CV auf ${targetLang.toUpperCase()} bereit</span>
+        <a href="${url}" download="cv-sven-bohnstedt-${targetLang}.txt" class="btn btn-green btn-sm">Herunterladen</a>
+      </div>
+      <p style="font-size:11px;color:var(--text-4);margin-top:8px;">Hinweis: Der Download ist als Textdatei — Formatierung nach Bedarf anpassen.</p>
+    `;
+
+  } catch(err) {
+    addLog(`Fehler: ${err.message}`);
+    result.innerHTML = `<div style="background:#fdf0ef;border:1px solid #f0c0bc;padding:12px;font-size:13px;color:var(--red);">${err.message}</div>`;
+    fill.style.width = '100%';
+    fill.style.background = 'var(--red)';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'CV übersetzen';
+}
+</script>
+</body>
+</html>
+

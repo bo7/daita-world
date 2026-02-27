@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="'Plus Jakarta Sans', system-ui, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#8fafc8"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c0392b"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#0078d4"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#0e7a45"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="480" fill="#f7fbff"/>
+
+  <!-- Title -->
+  <text x="40" y="44" font-size="13" font-weight="600" letter-spacing="0.1em" fill="#8fafc8">VORHER / NACHHER — IT-SITUATION KLEINES BÜRO</text>
+
+  <!-- ===== VORHER ===== -->
+  <rect x="32" y="64" width="408" height="360" fill="white" stroke="#f0c0bc" stroke-width="1.5"/>
+  <rect x="32" y="64" width="408" height="28" fill="#fdf0ef"/>
+  <text x="52" y="82" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#c0392b">VORHER — Cloud-Flickenteppich</text>
+
+  <!-- Cloud services scattered -->
+  <rect x="52" y="110" width="110" height="52" fill="white" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="107" y="132" font-size="10" font-weight="500" fill="#0a1628" text-anchor="middle">Microsoft 365</text>
+  <text x="107" y="147" font-size="9" fill="#8fafc8" text-anchor="middle">~12 €/MA/Monat</text>
+  <text x="107" y="158" font-size="8" fill="#c0392b" text-anchor="middle">USA-Server</text>
+
+  <rect x="180" y="110" width="110" height="52" fill="white" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="235" y="132" font-size="10" font-weight="500" fill="#0a1628" text-anchor="middle">Cloud-Speicher</text>
+  <text x="235" y="147" font-size="9" fill="#8fafc8" text-anchor="middle">Dropbox / Drive</text>
+  <text x="235" y="158" font-size="8" fill="#c0392b" text-anchor="middle">unklar wo Daten liegen</text>
+
+  <rect x="308" y="110" width="110" height="52" fill="white" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="363" y="132" font-size="10" font-weight="500" fill="#0a1628" text-anchor="middle">VPN-Dienst</text>
+  <text x="363" y="147" font-size="9" fill="#8fafc8" text-anchor="middle">~8 €/MA/Monat</text>
+  <text x="363" y="158" font-size="8" fill="#c0392b" text-anchor="middle">funktioniert manchmal</text>
+
+  <rect x="52" y="186" width="110" height="52" fill="white" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="107" y="208" font-size="10" font-weight="500" fill="#0a1628" text-anchor="middle">Cloud-Backup</text>
+  <text x="107" y="223" font-size="9" fill="#8fafc8" text-anchor="middle">~15 €/Monat</text>
+  <text x="107" y="234" font-size="8" fill="#c0392b" text-anchor="middle">selten überprüft</text>
+
+  <rect x="180" y="186" width="110" height="52" fill="white" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="235" y="208" font-size="10" font-weight="500" fill="#0a1628" text-anchor="middle">Branchensoftware</text>
+  <text x="235" y="223" font-size="9" fill="#8fafc8" text-anchor="middle">lokale Installation</text>
+  <text x="235" y="234" font-size="8" fill="#c0392b" text-anchor="middle">nur ein PC</text>
+
+  <rect x="308" y="186" width="110" height="52" fill="white" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="363" y="208" font-size="10" font-weight="500" fill="#0a1628" text-anchor="middle">Homeoffice</text>
+  <text x="363" y="223" font-size="9" fill="#8fafc8" text-anchor="middle">per E-Mail / USB</text>
+  <text x="363" y="234" font-size="8" fill="#c0392b" text-anchor="middle">Versionschaos</text>
+
+  <!-- Problem arrows - chaotic -->
+  <line x1="107" y1="162" x2="235" y2="186" stroke="#f0c0bc" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="235" y1="162" x2="107" y2="186" stroke="#f0c0bc" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="363" y1="162" x2="235" y2="186" stroke="#f0c0bc" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="107" y1="238" x2="363" y2="186" stroke="#f0c0bc" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Cost summary -->
+  <rect x="52" y="264" width="366" height="60" fill="#fdf0ef" stroke="#f0c0bc" stroke-width="1"/>
+  <text x="235" y="286" font-size="11" font-weight="600" fill="#c0392b" text-anchor="middle">Monatliche Kosten für 4 Mitarbeitende</text>
+  <text x="235" y="305" font-size="13" font-weight="600" fill="#c0392b" text-anchor="middle">ca. 200–350 € / Monat — steigend</text>
+  <text x="235" y="320" font-size="9" fill="#c0392b" text-anchor="middle">zzgl. verlorene Arbeitsstunden durch IT-Probleme</text>
+
+  <!-- Pain points -->
+  <text x="52" y="356" font-size="10" fill="#c0392b">✕  Daten auf fremden Servern, unbekannter Standort</text>
+  <text x="52" y="372" font-size="10" fill="#c0392b">✕  Kein verlässlicher Ansprechpartner bei Problemen</text>
+  <text x="52" y="388" font-size="10" fill="#c0392b">✕  Homeoffice umständlich, Versionschaos bei Dateien</text>
+  <text x="52" y="404" font-size="10" fill="#c0392b">✕  Backup ungeprüft, Restore nie getestet</text>
+
+  <!-- ===== NACHHER ===== -->
+  <rect x="460" y="64" width="408" height="360" fill="white" stroke="#a3d9b8" stroke-width="1.5"/>
+  <rect x="460" y="64" width="408" height="28" fill="#f0faf5"/>
+  <text x="480" y="82" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#0e7a45">NACHHER — SOS Server</text>
+
+  <!-- Single server -->
+  <rect x="600" y="108" width="140" height="80" fill="white" stroke="#0078d4" stroke-width="1.5"/>
+  <rect x="600" y="108" width="140" height="22" fill="#0078d4"/>
+  <text x="670" y="123" font-size="10" font-weight="600" fill="white" text-anchor="middle">SOS SERVER</text>
+  <text x="670" y="147" font-size="9" fill="#4a6580" text-anchor="middle">Windows · Dateien</text>
+  <text x="670" y="161" font-size="9" fill="#4a6580" text-anchor="middle">Backup · Netzwerk</text>
+  <text x="670" y="175" font-size="9" fill="#1e3a5f" font-weight="500" text-anchor="middle">alles auf einer Maschine</text>
+
+  <!-- Devices connecting -->
+  <rect x="480" y="220" width="88" height="52" fill="white" stroke="#d0e4f4" stroke-width="1"/>
+  <text x="524" y="242" font-size="9" font-weight="500" fill="#0a1628" text-anchor="middle">Büro MA 1+2</text>
+  <text x="524" y="256" font-size="8" fill="#8fafc8" text-anchor="middle">Thin Client</text>
+  <text x="524" y="268" font-size="8" fill="#4a6580" text-anchor="middle">günstig</text>
+
+  <rect x="756" y="220" width="88" height="52" fill="white" stroke="#d0e4f4" stroke-width="1"/>
+  <text x="800" y="242" font-size="9" font-weight="500" fill="#0a1628" text-anchor="middle">Homeoffice</text>
+  <text x="800" y="256" font-size="8" fill="#8fafc8" text-anchor="middle">Laptop</text>
+  <text x="800" y="268" font-size="8" fill="#4a6580" text-anchor="middle">wie im Büro</text>
+
+  <rect x="618" y="220" width="104" height="52" fill="white" stroke="#d0e4f4" stroke-width="1"/>
+  <text x="670" y="242" font-size="9" font-weight="500" fill="#0a1628" text-anchor="middle">Mobil / Kunde</text>
+  <text x="670" y="256" font-size="8" fill="#8fafc8" text-anchor="middle">beliebiges Gerät</text>
+  <text x="670" y="268" font-size="8" fill="#4a6580" text-anchor="middle">verschlüsselt</text>
+
+  <!-- Clean arrows from server to all -->
+  <line x1="630" y1="188" x2="524" y2="220" stroke="#0078d4" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <line x1="670" y1="188" x2="670" y2="220" stroke="#0078d4" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <line x1="710" y1="188" x2="800" y2="220" stroke="#0078d4" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+  <!-- Cost summary -->
+  <rect x="480" y="296" width="366" height="60" fill="#f0faf5" stroke="#a3d9b8" stroke-width="1"/>
+  <text x="663" y="318" font-size="11" font-weight="600" fill="#0e7a45" text-anchor="middle">4.999 € einmalig · danach 199 €/Monat</text>
+  <text x="663" y="337" font-size="10" fill="#0e7a45" text-anchor="middle">nach ca. 18 Monaten günstiger als vorher</text>
+  <text x="663" y="352" font-size="9" fill="#4a6580" text-anchor="middle">und die Daten gehören Ihnen</text>
+
+  <!-- Benefits -->
+  <text x="480" y="384" font-size="10" fill="#0e7a45">✓  Daten auf Ihrer Hardware, in Ihrem Haus</text>
+  <text x="480" y="400" font-size="10" fill="#0e7a45">✓  Reaktionszeit unter einer Stunde, zugesagt</text>
+  <text x="480" y="416" font-size="10" fill="#0e7a45">✓  Homeoffice und Büro identisch — nahtlos</text>
+  <text x="480" y="432" font-size="10" fill="#0e7a45">✓  Backup täglich, verschlüsselt, geprüft</text>
+
+  <!-- VS divider -->
+  <rect x="424" y="200" width="32" height="32" fill="#0a1628"/>
+  <text x="440" y="221" font-size="12" font-weight="700" fill="white" text-anchor="middle">VS</text>
+</svg>
+

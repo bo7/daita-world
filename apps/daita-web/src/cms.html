@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS — DAITA-CRAFTER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0078d4;
+      --blue-dark: #005a9e;
+      --green: #0e7a45;
+      --red: #c0392b;
+      --bg: #f7fbff;
+      --surface: #ffffff;
+      --border: #d0e4f4;
+      --text: #0a1628;
+      --text-2: #1e3a5f;
+      --text-3: #4a6580;
+      --text-4: #8fafc8;
+      --radius: 0px;
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* Layout */
+    #app { display: none; }
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-box { background: var(--surface); border: 1px solid var(--border); padding: 48px; width: 400px; }
+    .login-box h1 { font-size: 20px; font-weight: 700; color: var(--text-2); margin-bottom: 8px; }
+    .login-box p { font-size: 13px; color: var(--text-4); margin-bottom: 32px; }
+
+    header { background: var(--text-2); color: white; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 14px; font-weight: 600; letter-spacing: 0.1em; }
+    .header-right { display: flex; gap: 16px; align-items: center; font-size: 13px; color: #8fafc8; }
+
+    .main { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 56px); }
+    .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; }
+    .sidebar-section { margin-bottom: 8px; }
+    .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: var(--text-4); padding: 0 20px 8px; }
+    .page-item { padding: 10px 20px; cursor: pointer; font-size: 13px; color: var(--text-3); display: flex; align-items: center; gap: 8px; border-left: 3px solid transparent; }
+    .page-item:hover { background: var(--bg); color: var(--text-2); }
+    .page-item.active { border-left-color: var(--blue); background: #f0f6fd; color: var(--blue); font-weight: 600; }
+    .pub-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-4); flex-shrink: 0; }
+    .pub-dot.published { background: var(--green); }
+
+    .content { padding: 32px; overflow-y: auto; }
+    .content-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .content-header h2 { font-size: 22px; font-weight: 700; color: var(--text-2); }
+    .lang-tabs { display: flex; gap: 4px; background: var(--border); padding: 3px; }
+    .lang-tab { padding: 6px 16px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text-3); }
+    .lang-tab.active { background: var(--surface); color: var(--blue); }
+
+    .block-card { background: var(--surface); border: 1px solid var(--border); margin-bottom: 16px; }
+    .block-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .block-meta { display: flex; align-items: center; gap: 12px; }
+    .block-key { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--blue); background: #f0f6fd; padding: 3px 8px; }
+    .block-title-preview { font-size: 13px; font-weight: 500; color: var(--text-2); }
+    .block-actions { display: flex; gap: 8px; align-items: center; }
+    .badge { font-size: 10px; font-weight: 600; padding: 3px 8px; letter-spacing: 0.06em; }
+    .badge-reviewed { background: #e8f8ef; color: var(--green); }
+    .badge-draft { background: #fff3e0; color: #e65100; }
+    .badge-missing { background: #fdf0ef; color: var(--red); }
+
+    .block-body { padding: 20px; display: none; }
+    .block-body.open { display: block; }
+    .field-group { margin-bottom: 16px; }
+    .field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: var(--text-4); margin-bottom: 6px; }
+    .field-input { width: 100%; border: 1px solid var(--border); padding: 10px 12px; font-family: inherit; font-size: 14px; color: var(--text); background: var(--bg); resize: none; outline: none; }
+    .field-input:focus { border-color: var(--blue); background: var(--surface); }
+    textarea.field-input { min-height: 140px; font-size: 13px; line-height: 1.6; }
+    .field-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+
+    /* Buttons */
+    .btn { padding: 8px 18px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; letter-spacing: 0.02em; }
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-primary:disabled { background: var(--border); color: var(--text-4); cursor: not-allowed; }
+    .btn-green { background: var(--green); color: white; }
+    .btn-green:hover { background: #0a5c33; }
+    .btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--blue); }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--border); }
+    .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text-2); color: white; padding: 14px 20px; font-size: 13px; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+    .toast.error { background: var(--red); }
+
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state { text-align: center; padding: 80px 40px; color: var(--text-4); }
+    .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text-3); }
+
+    .add-page-form { padding: 20px; border-top: 1px solid var(--border); margin-top: 8px; }
+    .add-page-form input { width: 100%; border: 1px solid var(--border); padding: 8px 10px; font-family: inherit; font-size: 13px; margin-bottom: 8px; outline: none; }
+    .add-page-form input:focus { border-color: var(--blue); }
+
+    .progress-bar { height: 3px; background: var(--border); margin-top: 8px; }
+    .progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>CMS — DAITA-CRAFTER</h1>
+    <p>Anmeldung erforderlich</p>
+    <div class="field-group">
+      <div class="field-label">E-MAIL</div>
+      <input type="email" id="login-email" class="field-input" placeholder="sven@...">
+    </div>
+    <div class="field-group">
+      <div class="field-label">PASSWORT</div>
+      <input type="password" id="login-pw" class="field-input">
+    </div>
+    <button class="btn btn-primary" id="login-btn" onclick="doLogin()" style="width:100%;margin-top:8px;">Anmelden</button>
+    <div id="login-error" style="color:var(--red);font-size:12px;margin-top:12px;display:none;"></div>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <header>
+    <h1>DAITA-CRAFTER CMS</h1>
+    <div class="header-right">
+      <span id="user-email"></span>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">Abmelden</button>
+    </div>
+  </header>
+  <div class="main">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">SEITEN</div>
+        <div id="page-list"></div>
+      </div>
+      <div class="add-page-form">
+        <div class="field-label">NEUE SEITE</div>
+        <input type="text" id="new-page-slug" placeholder="slug (z.B. blog/mein-artikel)">
+        <select id="new-page-template" class="field-input" style="margin-bottom:8px;">
+          <option value="blog">blog</option>
+          <option value="landing">landing</option>
+          <option value="static">static</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="addPage()" style="width:100%;">+ Seite anlegen</button>
+      </div>
+    </div>
+    <div class="content">
+      <div id="content-area">
+        <div class="empty-state">
+          <h3>Seite auswählen</h3>
+          <p>Wähle links eine Seite aus oder lege eine neue an.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://imuhzzxnkrmiwlccraff.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltdWh6enhua3JtaXdsY2NyYWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5MDE0ODEsImV4cCI6MjA4NzQ3NzQ4MX0.zsrIn4g53_5raGUmxTuIu68KX9AmsWOic70uXa8Hrqk';
+const TRANSLATE_URL = '/api/translate';
+const LANGS = ['de', 'en'];
+const LANG_LABELS = { de: 'Deutsch', en: 'English' };
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let state = {
+  pages: [],
+  activePage: null,
+  blocks: [],
+  translations: {}, // blockId -> { de: {...}, en: {...} }
+  activeLang: 'de',
+};
+
+// ── Auth ──────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pw = document.getElementById('login-pw').value;
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Anmelden...';
+  const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) {
+    document.getElementById('login-error').textContent = error.message;
+    document.getElementById('login-error').style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Anmelden';
+  }
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+}
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('user-email').textContent = session.user.email;
+    await loadPages();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
+
+document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+// ── Pages ─────────────────────────────────────────────────────
+async function loadPages() {
+  const { data } = await sb.from('pages').select('*').order('slug');
+  state.pages = data || [];
+  renderPageList();
+}
+
+function renderPageList() {
+  const el = document.getElementById('page-list');
+  el.innerHTML = state.pages.map(p => `
+    <div class="page-item ${state.activePage?.id === p.id ? 'active' : ''}" onclick="selectPage('${p.id}')">
+      <div class="pub-dot ${p.published ? 'published' : ''}"></div>
+      <span>${p.slug}</span>
+    </div>
+  `).join('');
+}
+
+async function selectPage(id) {
+  state.activePage = state.pages.find(p => p.id === id);
+  await loadBlocks();
+  renderPageList();
+}
+
+async function addPage() {
+  const slug = document.getElementById('new-page-slug').value.trim();
+  const template = document.getElementById('new-page-template').value;
+  if (!slug) return;
+  const { data, error } = await sb.from('pages').insert({ slug, template }).select().single();
+  if (error) { toast(error.message, true); return; }
+  state.pages.push(data);
+  document.getElementById('new-page-slug').value = '';
+  renderPageList();
+  selectPage(data.id);
+  toast('Seite angelegt');
+}
+
+// ── Blocks ────────────────────────────────────────────────────
+async function loadBlocks() {
+  const { data: blocks } = await sb.from('content_blocks')
+    .select('*').eq('page_id', state.activePage.id).order('sort_order');
+  state.blocks = blocks || [];
+
+  if (blocks && blocks.length > 0) {
+    const ids = blocks.map(b => b.id);
+    const { data: trans } = await sb.from('content_translations')
+      .select('*').in('block_id', ids);
+    state.translations = {};
+    (trans || []).forEach(t => {
+      if (!state.translations[t.block_id]) state.translations[t.block_id] = {};
+      state.translations[t.block_id][t.language_code] = t;
+    });
+  }
+
+  renderContentArea();
+}
+
+function renderContentArea() {
+  const p = state.activePage;
+  const area = document.getElementById('content-area');
+
+  // Count translation coverage
+  let total = state.blocks.length * LANGS.length;
+  let done = 0;
+  state.blocks.forEach(b => {
+    LANGS.forEach(l => { if (state.translations[b.id]?.[l]) done++; });
+  });
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  area.innerHTML = `
+    <div class="content-header">
+      <div>
+        <h2>${p.slug}</h2>
+        <div style="font-size:12px;color:var(--text-4);margin-top:4px;">
+          ${state.blocks.length} Blöcke · ${done}/${total} Übersetzungen
+          <div class="progress-bar" style="width:200px;display:inline-block;vertical-align:middle;margin-left:8px;">
+            <div class="progress-fill" style="width:${pct}%"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="lang-tabs">
+          ${LANGS.map(l => `<div class="lang-tab ${state.activeLang === l ? 'active' : ''}" onclick="setLang('${l}')">${l.toUpperCase()}</div>`).join('')}
+        </div>
+        <button class="btn btn-green btn-sm" onclick="translateAll()">Alle → ${state.activeLang === 'de' ? 'EN' : 'DE'} übersetzen</button>
+        <button class="btn btn-outline btn-sm" onclick="togglePublished()">
+          ${p.published ? 'Depublizieren' : 'Veröffentlichen'}
+        </button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="addBlock()">+ Block hinzufügen</button>
+    </div>
+
+    <div id="block-list">
+      ${state.blocks.map(b => renderBlock(b)).join('')}
+    </div>
+  `;
+}
+
+function renderBlock(b) {
+  const lang = state.activeLang;
+  const t = state.translations[b.id]?.[lang];
+  const hasTrans = !!t;
+  const badge = hasTrans
+    ? (t.reviewed ? '<span class="badge badge-reviewed">geprüft</span>' : '<span class="badge badge-draft">Entwurf</span>')
+    : '<span class="badge badge-missing">fehlt</span>';
+
+  return `
+    <div class="block-card" id="block-${b.id}">
+      <div class="block-header" onclick="toggleBlock('${b.id}')">
+        <div class="block-meta">
+          <span class="block-key">${b.block_key}</span>
+          <span class="block-title-preview">${t?.title || '—'}</span>
+        </div>
+        <div class="block-actions">
+          ${badge}
+          <span style="color:var(--text-4);font-size:18px;line-height:1;">${document.querySelector(`#block-${b.id} .block-body`)?.classList.contains('open') ? '▲' : '▼'}</span>
+        </div>
+      </div>
+      <div class="block-body" id="body-${b.id}">
+        <div class="field-group">
+          <div class="field-label">ÜBERSCHRIFT (${lang.toUpperCase()})</div>
+          <input type="text" class="field-input" id="title-${b.id}" value="${escHtml(t?.title || '')}" placeholder="H2-Überschrift">
+        </div>
+        <div class="field-group">
+          <div class="field-label">INHALT HTML (${lang.toUpperCase()})</div>
+          <textarea class="field-input" id="content-${b.id}" placeholder="<p>...</p>">${escHtml(t?.content || '')}</textarea>
+        </div>
+        <div class="field-actions">
+          <button class="btn btn-primary btn-sm" onclick="saveBlock('${b.id}')">Speichern</button>
+          <button class="btn btn-green btn-sm" id="translate-btn-${b.id}" onclick="translateBlock('${b.id}')">
+            Übersetzen → ${lang === 'de' ? 'EN' : 'DE'}
+          </button>
+          ${hasTrans && !t.reviewed ? `<button class="btn btn-outline btn-sm" onclick="markReviewed('${b.id}')">Als geprüft markieren</button>` : ''}
+          <button class="btn btn-danger btn-sm" onclick="deleteBlock('${b.id}')">Block löschen</button>
+          <span style="font-size:11px;color:var(--text-4);margin-left:8px;">
+            ${t ? `${t.translated_by} · ${new Date(t.updated_at).toLocaleDateString('de-DE')}` : ''}
+          </span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleBlock(id) {
+  const body = document.getElementById(`body-${id}`);
+  body.classList.toggle('open');
+}
+
+function setLang(lang) {
+  state.activeLang = lang;
+  renderContentArea();
+}
+
+// ── Save ──────────────────────────────────────────────────────
+async function saveBlock(blockId) {
+  const lang = state.activeLang;
+  const title = document.getElementById(`title-${blockId}`).value;
+  const content = document.getElementById(`content-${blockId}`).value;
+
+  const existing = state.translations[blockId]?.[lang];
+  let result;
+  if (existing) {
+    result = await sb.from('content_translations')
+      .update({ title, content, translated_by: 'human', reviewed: true })
+      .eq('id', existing.id).select().single();
+  } else {
+    result = await sb.from('content_translations')
+      .insert({ block_id: blockId, language_code: lang, title, content, translated_by: 'human', reviewed: true })
+      .select().single();
+  }
+
+  if (result.error) { toast(result.error.message, true); return; }
+  if (!state.translations[blockId]) state.translations[blockId] = {};
+  state.translations[blockId][lang] = result.data;
+  toast('Gespeichert');
+  refreshBlock(blockId);
+}
+
+async function markReviewed(blockId) {
+  const lang = state.activeLang;
+  const t = state.translations[blockId]?.[lang];
+  if (!t) return;
+  const { data } = await sb.from('content_translations').update({ reviewed: true }).eq('id', t.id).select().single();
+  state.translations[blockId][lang] = data;
+  refreshBlock(blockId);
+  toast('Als geprüft markiert');
+}
+
+async function deleteBlock(blockId) {
+  if (!confirm('Block wirklich löschen? Alle Übersetzungen werden entfernt.')) return;
+  await sb.from('content_blocks').delete().eq('id', blockId);
+  state.blocks = state.blocks.filter(b => b.id !== blockId);
+  delete state.translations[blockId];
+  renderContentArea();
+  toast('Block gelöscht');
+}
+
+async function addBlock() {
+  const key = prompt('Block-Key (z.B. "intro", "faq", "cta"):');
+  if (!key) return;
+  const { data, error } = await sb.from('content_blocks')
+    .insert({ page_id: state.activePage.id, block_key: key.toLowerCase().trim(), sort_order: state.blocks.length * 10 })
+    .select().single();
+  if (error) { toast(error.message, true); return; }
+  state.blocks.push(data);
+  renderContentArea();
+  toast('Block angelegt');
+  setTimeout(() => toggleBlock(data.id), 100);
+}
+
+async function togglePublished() {
+  const p = state.activePage;
+  const { data } = await sb.from('pages').update({ published: !p.published }).eq('id', p.id).select().single();
+  state.activePage = data;
+  state.pages = state.pages.map(pg => pg.id === data.id ? data : pg);
+  renderPageList();
+  renderContentArea();
+  toast(data.published ? 'Seite veröffentlicht' : 'Seite depubliziert');
+}
+
+function refreshBlock(blockId) {
+  const b = state.blocks.find(x => x.id === blockId);
+  if (!b) return;
+  const card = document.getElementById(`block-${blockId}`);
+  const wasOpen = document.getElementById(`body-${blockId}`)?.classList.contains('open');
+  if (card) {
+    card.outerHTML = renderBlock(b);
+    if (wasOpen) document.getElementById(`body-${blockId}`)?.classList.add('open');
+  }
+}
+
+// ── Translate ─────────────────────────────────────────────────
+async function translateBlock(blockId) {
+  const sourceLang = state.activeLang === 'de' ? 'de' : 'en';
+  const targetLang = sourceLang === 'de' ? 'en' : 'de';
+  const sourceT = state.translations[blockId]?.[sourceLang];
+  if (!sourceT) { toast('Erst Quellsprache speichern', true); return; }
+
+  const btn = document.getElementById(`translate-btn-${blockId}`);
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span>Übersetze...`;
+
+  const textToTranslate = `<h2>${sourceT.title || ''}</h2>\n${sourceT.content}`;
+
+  try {
+    const res = await fetch(TRANSLATE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: textToTranslate, sourceLang, targetLang })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Übersetzungsfehler');
+
+    // Parse title back out
+    let translated = data.translated;
+    let title = '', content = translated;
+    const h2match = translated.match(/^<h2>([\s\S]*?)<\/h2>/);
+    if (h2match) { title = h2match[1]; content = translated.slice(h2match[0].length).trim(); }
+
+    // Save to DB as targetLang
+    const existing = state.translations[blockId]?.[targetLang];
+    let result;
+    const modelLabel = `ollama:${data.model || 'qwen3'}`;
+    if (existing) {
+      result = await sb.from('content_translations')
+        .update({ title, content, translated_by: modelLabel, reviewed: false })
+        .eq('id', existing.id).select().single();
+    } else {
+      result = await sb.from('content_translations')
+        .insert({ block_id: blockId, language_code: targetLang, title, content, translated_by: modelLabel, reviewed: false })
+        .select().single();
+    }
+    if (!state.translations[blockId]) state.translations[blockId] = {};
+    state.translations[blockId][targetLang] = result.data;
+
+    toast(`Übersetzt nach ${targetLang.toUpperCase()} (${modelLabel})`);
+
+    // Switch to target lang to show result
+    state.activeLang = targetLang;
+    renderContentArea();
+    setTimeout(() => toggleBlock(blockId), 100);
+
+  } catch (err) {
+    toast(err.message, true);
+    btn.disabled = false;
+    btn.innerHTML = `Übersetzen → ${sourceLang === 'de' ? 'EN' : 'DE'}`;
+  }
+}
+
+async function translateAll() {
+  const sourceLang = state.activeLang === 'de' ? 'de' : 'en';
+  const blocksToTranslate = state.blocks.filter(b => state.translations[b.id]?.[sourceLang]);
+  if (blocksToTranslate.length === 0) { toast('Keine Blöcke in Quellsprache vorhanden', true); return; }
+  toast(`Übersetze ${blocksToTranslate.length} Blöcke...`);
+  for (const b of blocksToTranslate) {
+    await translateBlock(b.id);
+    await new Promise(r => setTimeout(r, 500));
+  }
+  toast('Alle Blöcke übersetzt');
+}
+
+// ── Utils ─────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let toastTimer;
+function toast(msg, isError = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
+

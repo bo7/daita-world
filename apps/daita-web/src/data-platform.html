@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Platform — DAITA-CRAFTER</title>
+<meta name="description" content="Enterprise-Datenplattformen für mittelständische Unternehmen. Lakehouse-Architekturen, Cloud-Migration, BI und Reporting — pragmatisch und kosteneffizient.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-600:#0078d4;--blue-700:#106ebe;--blue-800:#005a9e;--blue-50:#f0f6fd;--blue-100:#daeaf8;--blue-200:#b0d0f0;
+    --text-900:#0a1628;--text-700:#1e3a5f;--text-500:#4a6580;--text-300:#8fafc8;
+    --white:#ffffff;--surface:#f7fbff;--border:#d0e4f4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text-900);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:72px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;}
+  .logo{font-size:15px;font-weight:600;letter-spacing:0.06em;color:var(--text-900);text-transform:uppercase;text-decoration:none;}
+  .logo-dot{display:inline-block;width:6px;height:6px;background:var(--blue-600);border-radius:50%;margin:0 4px;vertical-align:middle;position:relative;top:-1px;}
+  nav ul{display:flex;gap:36px;list-style:none;}
+  nav ul a{font-size:14px;color:var(--text-500);text-decoration:none;transition:color 0.2s;}
+  nav ul a:hover,nav ul a.active{color:var(--blue-600);}
+  .nav-cta{padding:10px 24px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .nav-cta:hover{background:var(--blue-700);}
+  .hero{padding:96px 64px 80px;max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:center;border-bottom:1px solid var(--border);}
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-600);background:var(--blue-50);border:1px solid var(--blue-200);padding:4px 12px;display:inline-block;margin-bottom:28px;}
+  h1{font-family:'Instrument Serif',serif;font-size:clamp(44px,5vw,72px);font-weight:400;line-height:1.08;margin-bottom:24px;}
+  h1 em{color:var(--blue-600);font-style:italic;}
+  .hero-desc{font-size:17px;color:var(--text-500);line-height:1.75;font-weight:300;margin-bottom:40px;max-width:500px;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn-primary{padding:15px 32px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .btn-primary:hover{background:var(--blue-700);}
+  .btn-outline{padding:15px 32px;background:transparent;color:var(--blue-600);font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--blue-200);cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .btn-outline:hover{background:var(--blue-50);}
+  .hero-aside{display:flex;flex-direction:column;gap:0;}
+  .stat-row{padding:28px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:24px;}
+  .stat-row:first-child{border-top:1px solid var(--border);}
+  .stat-num{font-family:'Instrument Serif',serif;font-size:48px;line-height:1;color:var(--blue-600);min-width:80px;}
+  .stat-label{font-size:14px;color:var(--text-500);font-weight:300;line-height:1.5;padding-top:8px;}
+  section{padding:80px 64px;max-width:1440px;margin:0 auto;}
+  .section-header{margin-bottom:56px;}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-300);margin-bottom:16px;}
+  h2{font-family:'Instrument Serif',serif;font-size:clamp(32px,3.5vw,48px);font-weight:400;line-height:1.2;margin-bottom:16px;}
+  .section-desc{font-size:16px;color:var(--text-500);line-height:1.75;font-weight:300;max-width:560px;}
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .service-card{background:var(--white);padding:40px;transition:background 0.2s;}
+  .service-card:hover{background:var(--surface);}
+  .service-icon{width:48px;height:48px;background:var(--blue-50);border:1px solid var(--blue-200);display:flex;align-items:center;justify-content:center;margin-bottom:24px;}
+  .service-icon svg{width:22px;height:22px;stroke:var(--blue-600);fill:none;}
+  .service-name{font-size:17px;font-weight:500;color:var(--text-900);margin-bottom:12px;}
+  .service-desc{font-size:14px;color:var(--text-500);line-height:1.7;font-weight:300;}
+  .process-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);}
+  .process-item{display:grid;grid-template-columns:80px 1fr auto;gap:32px;align-items:start;padding:40px;border-bottom:1px solid var(--border);transition:background 0.2s;}
+  .process-item:last-child{border-bottom:none;}
+  .process-item:hover{background:var(--surface);}
+  .process-num{font-family:'Instrument Serif',serif;font-size:40px;color:var(--blue-100);line-height:1;}
+  .process-content h3{font-size:17px;font-weight:500;margin-bottom:8px;}
+  .process-content p{font-size:14px;color:var(--text-500);line-height:1.7;font-weight:300;}
+  .process-duration{font-size:12px;color:var(--text-300);white-space:nowrap;padding-top:4px;}
+  .tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .tech-cell{background:var(--white);padding:24px 28px;}
+  .tech-cell-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-300);margin-bottom:12px;}
+  .tech-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .tech-tag{font-size:12px;font-weight:500;color:var(--text-700);background:var(--surface);border:1px solid var(--border);padding:4px 10px;}
+  .cta-section{background:var(--text-900);padding:80px 64px;text-align:center;}
+  .cta-section h2{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;color:var(--white);margin-bottom:16px;}
+  .cta-section p{font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:40px;font-weight:300;}
+  .btn-white{padding:15px 36px;background:var(--white);color:var(--text-900);font-family:inherit;font-size:14px;font-weight:600;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity 0.2s;}
+  .btn-white:hover{opacity:0.9;}
+  footer{border-top:1px solid var(--border);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;max-width:1440px;margin:0 auto;}
+  footer span{font-size:13px;color:var(--text-300);}
+  footer a{font-size:13px;color:var(--blue-600);text-decoration:none;}
+  @media(max-width:960px){
+    nav{padding:0 24px;} nav ul{display:none;}
+    .hero,.process-item{grid-template-columns:1fr;} .hero{padding:48px 24px;gap:48px;}
+    section{padding:48px 24px;} .services-grid{grid-template-columns:1fr;} .tech-grid{grid-template-columns:repeat(2,1fr);}
+    .cta-section{padding:48px 24px;} footer{padding:24px;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">DAITA<span class="logo-dot"></span>CRAFTER</a>
+  <ul>
+    <li><a href="/#leistungen">Leistungen</a></li>
+    <li><a href="/blog/index.html">Blog</a></li>
+    <li><a href="/data-platform.html" class="active">Data Platform</a></li>
+    <li><a href="/sos.html">Small Office</a></li>
+    <li><a href="/#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="/#kontakt" class="nav-cta">Kostenloses Gespräch</a>
+</nav>
+
+<div class="hero">
+  <div>
+    <span class="eyebrow">Data Platform</span>
+    <h1>Ihre Daten.<br><em>Strukturiert</em>,<br>skalierbar, nutzbar.</h1>
+    <p class="hero-desc">Wir bauen Datenplattformen, die wirklich genutzt werden. Keine Overengineering-Fallen, keine unnötigen Cloud-Kosten — sondern pragmatische Architektur, die mit Ihrem Unternehmen wächst.</p>
+    <div class="hero-actions">
+      <a href="/#kontakt" class="btn-primary">Projekt besprechen</a>
+      <a href="/portal.html" class="btn-outline">CV herunterladen</a>
+    </div>
+  </div>
+  <div class="hero-aside">
+    <div class="stat-row">
+      <div class="stat-num">10+</div>
+      <div class="stat-label">Jahre Enterprise-Erfahrung<br>in Daten &amp; Infrastruktur</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-num">4</div>
+      <div class="stat-label">parallele Enterprise-Branchen<br>gleichzeitig betreut</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-num">DP-203</div>
+      <div class="stat-label">Microsoft Azure<br>Data Engineer Associate</div>
+    </div>
+  </div>
+</div>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="section-header">
+    <div class="section-label">Leistungsportfolio</div>
+    <h2>Was wir für Sie bauen</h2>
+    <p class="section-desc">Von der Rohdatenerfassung bis zum entscheidungsreifen Dashboard — alles aus einer Hand, mit klarem Fokus auf nachhaltigen Betrieb.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+      </div>
+      <div class="service-name">Lakehouse-Architektur</div>
+      <div class="service-desc">Moderne Datenbankschichten auf Basis von MinIO, DuckDB, Apache Iceberg oder Delta Lake. Skalierbar, offen, kostengünstig.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="service-name">ETL &amp; Datenpipelines</div>
+      <div class="service-desc">Robuste Ingestion- und Transformationspipelines mit Azure Data Factory, Apache Airflow oder maßgeschneiderten Lösungen.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>
+        </svg>
+      </div>
+      <div class="service-name">Business Intelligence</div>
+      <div class="service-desc">Power BI-Reports, DAX-Optimierung und semantische Modelle, die Fachabteilungen wirklich nutzen — ohne IT-Abhängigkeit.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>
+        </svg>
+      </div>
+      <div class="service-name">Cloud-Migration</div>
+      <div class="service-desc">Strukturierte Migration bestehender On-Premise-Systeme nach Azure mit Fokus auf Datenkontinuität und Kostenkontrolle.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+        </svg>
+      </div>
+      <div class="service-name">ML-Plattformen</div>
+      <div class="service-desc">Feature Stores, Experiment Tracking und Modell-Deployment auf Basis von MLflow, lokalen oder Azure-Umgebungen.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="service-name">Data Governance</div>
+      <div class="service-desc">Datenqualitäts-Frameworks, Lineage-Tracking und Metadaten-Management für nachhaltigen Plattformbetrieb.</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="section-header">
+    <div class="section-label">Vorgehen</div>
+    <h2>Wie ein Projekt entsteht</h2>
+  </div>
+  <div class="process-list">
+    <div class="process-item">
+      <div class="process-num">01</div>
+      <div class="process-content">
+        <h3>Discovery &amp; Bestandsaufnahme</h3>
+        <p>Wir verstehen Ihre aktuelle Datensituation, vorhandene Systeme und die konkreten Geschäftsziele. Kein Verkaufsgespräch — ein ehrlicher technischer Austausch.</p>
+      </div>
+      <div class="process-duration">1–2 Tage</div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">02</div>
+      <div class="process-content">
+        <h3>Architekturentwurf</h3>
+        <p>Auf Basis der Discovery erarbeiten wir einen konkreten Architekturentwurf mit Technologieempfehlungen, Kostenabschätzung und Umsetzungsplan.</p>
+      </div>
+      <div class="process-duration">1 Woche</div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">03</div>
+      <div class="process-content">
+        <h3>Pilotimplementierung</h3>
+        <p>Wir bauen einen lauffähigen Proof-of-Concept mit realen Daten — klein, messbar, ohne Riesenprojekt. So sehen Sie früh, was entsteht.</p>
+      </div>
+      <div class="process-duration">2–4 Wochen</div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">04</div>
+      <div class="process-content">
+        <h3>Produktivbetrieb &amp; Übergabe</h3>
+        <p>Vollständige Implementierung, Dokumentation, Schulung Ihres Teams und geordnete Übergabe — so dass Sie die Plattform selbst weiterentwickeln können.</p>
+      </div>
+      <div class="process-duration">4–12 Wochen</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="section-header">
+    <div class="section-label">Technologien</div>
+    <h2>Bewährter Stack</h2>
+    <p class="section-desc">Keine proprietären Sackgassen. Offene Standards wo immer möglich.</p>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-cell">
+      <div class="tech-cell-label">Storage &amp; Lakehouse</div>
+      <div class="tech-tags">
+        <span class="tech-tag">MinIO</span>
+        <span class="tech-tag">Azure Data Lake</span>
+        <span class="tech-tag">Delta Lake</span>
+        <span class="tech-tag">Apache Iceberg</span>
+      </div>
+    </div>
+    <div class="tech-cell">
+      <div class="tech-cell-label">Verarbeitung</div>
+      <div class="tech-tags">
+        <span class="tech-tag">DuckDB</span>
+        <span class="tech-tag">Apache Spark</span>
+        <span class="tech-tag">dbt</span>
+        <span class="tech-tag">SQL Server</span>
+      </div>
+    </div>
+    <div class="tech-cell">
+      <div class="tech-cell-label">Orchestrierung</div>
+      <div class="tech-tags">
+        <span class="tech-tag">Apache Airflow</span>
+        <span class="tech-tag">Azure Data Factory</span>
+        <span class="tech-tag">Prefect</span>
+      </div>
+    </div>
+    <div class="tech-cell">
+      <div class="tech-cell-label">Reporting &amp; BI</div>
+      <div class="tech-tags">
+        <span class="tech-tag">Power BI</span>
+        <span class="tech-tag">Apache Superset</span>
+        <span class="tech-tag">Metabase</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-section">
+  <h2>Bereit für Ihre Datenplattform?</h2>
+  <p>Kostenloses Erstgespräch — 45 Minuten, ohne Verkaufsdruck.</p>
+  <a href="/#kontakt" class="btn-white">Jetzt Gespräch vereinbaren</a>
+</div>
+
+<footer>
+  <span>© 2026 DAITA-CRAFTER · Sven Bohnstedt · Hamburg</span>
+  <a href="/blog/index.html">Blog</a>
+</footer>
+</body>
+</html>
+

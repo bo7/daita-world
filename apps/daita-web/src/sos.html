@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small Office Solution (SOS) — DAITA-CRAFTER</title>
+<meta name="description" content="Professionelle Daten- und IT-Lösungen für kleine Unternehmen und Büros. Bezahlbar, verständlich, wartbar — ohne eigene IT-Abteilung.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-600:#0078d4;--blue-700:#106ebe;--blue-50:#f0f6fd;--blue-100:#daeaf8;--blue-200:#b0d0f0;
+    --text-900:#0a1628;--text-700:#1e3a5f;--text-500:#4a6580;--text-300:#8fafc8;
+    --white:#ffffff;--surface:#f7fbff;--border:#d0e4f4;
+    --accent:#0e7a45;--accent-light:#f0faf5;--accent-border:#a3d9b8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text-900);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:72px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;}
+  .logo{font-size:15px;font-weight:600;letter-spacing:0.06em;color:var(--text-900);text-transform:uppercase;text-decoration:none;}
+  .logo-dot{display:inline-block;width:6px;height:6px;background:var(--blue-600);border-radius:50%;margin:0 4px;vertical-align:middle;position:relative;top:-1px;}
+  nav ul{display:flex;gap:36px;list-style:none;}
+  nav ul a{font-size:14px;color:var(--text-500);text-decoration:none;transition:color 0.2s;}
+  nav ul a:hover,nav ul a.active{color:var(--blue-600);}
+  .nav-cta{padding:10px 24px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .nav-cta:hover{background:var(--blue-700);}
+  .hero{padding:96px 64px 80px;max-width:1440px;margin:0 auto;border-bottom:1px solid var(--border);}
+  .hero-inner{max-width:800px;}
+  .sos-badge{display:inline-flex;align-items:center;gap:12px;margin-bottom:28px;}
+  .sos-label{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);background:var(--accent-light);border:1px solid var(--accent-border);padding:4px 12px;}
+  .sos-tag{font-size:12px;color:var(--text-300);border:1px solid var(--border);padding:4px 10px;}
+  h1{font-family:'Instrument Serif',serif;font-size:clamp(44px,5.5vw,76px);font-weight:400;line-height:1.08;margin-bottom:24px;}
+  h1 em{color:var(--blue-600);font-style:italic;}
+  .hero-desc{font-size:17px;color:var(--text-500);line-height:1.8;font-weight:300;margin-bottom:40px;max-width:600px;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px;}
+  .btn-primary{padding:15px 32px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .btn-primary:hover{background:var(--blue-700);}
+  .btn-outline{padding:15px 32px;background:transparent;color:var(--blue-600);font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--blue-200);cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .btn-outline:hover{background:var(--blue-50);}
+  .pain-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .pain-item{background:var(--surface);padding:24px 28px;display:flex;align-items:flex-start;gap:16px;}
+  .pain-icon{width:32px;height:32px;background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .pain-icon svg{width:16px;height:16px;stroke:var(--blue-600);fill:none;}
+  .pain-text{font-size:13px;color:var(--text-700);line-height:1.5;font-weight:400;}
+  .pain-text span{color:var(--text-900);font-weight:500;display:block;margin-bottom:2px;}
+  section{padding:80px 64px;max-width:1440px;margin:0 auto;}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-300);margin-bottom:16px;}
+  h2{font-family:'Instrument Serif',serif;font-size:clamp(30px,3.5vw,44px);font-weight:400;line-height:1.2;margin-bottom:16px;}
+  .section-desc{font-size:16px;color:var(--text-500);line-height:1.75;font-weight:300;max-width:540px;margin-bottom:48px;}
+  .packages{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .pkg{background:var(--white);padding:40px;display:flex;flex-direction:column;gap:24px;position:relative;}
+  .pkg.highlight{background:var(--blue-600);}
+  .pkg.highlight *{color:var(--white) !important;}
+  .pkg-recommended{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;background:var(--white);color:var(--blue-600) !important;padding:3px 10px;display:inline-block;width:fit-content;}
+  .pkg-name{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-300);}
+  .pkg.highlight .pkg-name{color:rgba(255,255,255,0.7) !important;}
+  .pkg-title{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400;color:var(--text-900);}
+  .pkg-price{font-size:13px;color:var(--text-500);font-weight:300;border-top:1px solid var(--border);padding-top:16px;}
+  .pkg.highlight .pkg-price{border-color:rgba(255,255,255,0.2);}
+  .pkg-features{display:flex;flex-direction:column;gap:10px;flex:1;}
+  .pkg-feature{font-size:14px;color:var(--text-500);display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+  .pkg-feature svg{width:14px;height:14px;stroke:var(--blue-600);fill:none;flex-shrink:0;margin-top:2px;}
+  .pkg.highlight .pkg-feature svg{stroke:rgba(255,255,255,0.8);}
+  .pkg-cta{display:block;padding:12px 20px;text-align:center;background:var(--surface);color:var(--blue-600);font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--blue-200);text-decoration:none;transition:all 0.2s;}
+  .pkg-cta:hover{background:var(--blue-50);}
+  .pkg.highlight .pkg-cta{background:var(--white);border:none;}
+  .pkg.highlight .pkg-cta:hover{opacity:0.9;}
+  .situations{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .situation{background:var(--white);padding:40px;}
+  .situation-q{font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;color:var(--text-900);margin-bottom:12px;line-height:1.3;}
+  .situation-a{font-size:14px;color:var(--text-500);line-height:1.7;font-weight:300;}
+  .simple-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .step{background:var(--white);padding:36px;transition:background 0.2s;}
+  .step:hover{background:var(--surface);}
+  .step-num{font-family:'Instrument Serif',serif;font-size:36px;color:var(--blue-200);margin-bottom:16px;line-height:1;}
+  .step-title{font-size:15px;font-weight:500;color:var(--text-900);margin-bottom:8px;}
+  .step-desc{font-size:13px;color:var(--text-500);line-height:1.6;font-weight:300;}
+  .quote-box{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--blue-600);padding:40px 48px;margin-top:0;}
+  .quote-text{font-family:'Instrument Serif',serif;font-size:24px;font-weight:400;color:var(--text-900);line-height:1.5;margin-bottom:16px;}
+  .quote-text em{color:var(--blue-600);font-style:italic;}
+  .quote-author{font-size:13px;color:var(--text-300);}
+  .cta-section{background:var(--text-900);padding:80px 64px;text-align:center;}
+  .cta-section h2{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;color:var(--white);margin-bottom:16px;}
+  .cta-section p{font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:40px;font-weight:300;}
+  .cta-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-top:16px;}
+  .btn-white{padding:15px 36px;background:var(--white);color:var(--text-900);font-family:inherit;font-size:14px;font-weight:600;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity 0.2s;}
+  .btn-white:hover{opacity:0.9;}
+  footer{border-top:1px solid var(--border);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;max-width:1440px;margin:0 auto;}
+  footer span{font-size:13px;color:var(--text-300);}
+  footer a{font-size:13px;color:var(--blue-600);text-decoration:none;}
+  @media(max-width:960px){
+    nav{padding:0 24px;} nav ul{display:none;}
+    .hero{padding:48px 24px;} section{padding:48px 24px;}
+    .pain-bar,.packages,.situations,.simple-steps{grid-template-columns:1fr;}
+    .cta-section{padding:48px 24px;} footer{padding:24px;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">DAITA<span class="logo-dot"></span>CRAFTER</a>
+  <ul>
+    <li><a href="/#leistungen">Leistungen</a></li>
+    <li><a href="/blog/index.html">Blog</a></li>
+    <li><a href="/data-platform.html">Data Platform</a></li>
+    <li><a href="/sos.html" class="active">Small Office</a></li>
+    <li><a href="/#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="/#kontakt" class="nav-cta">Kostenlos anfragen</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="sos-badge">
+      <span class="sos-label">SOS — Small Office Solution</span>
+      <span class="sos-tag">Für KMUs</span>
+    </div>
+    <h1>Professionelle Daten&shy;lösungen.<br>Auch ohne <em>IT-Abteilung.</em></h1>
+    <p class="hero-desc">Kleine Unternehmen haben dieselben Datenanforderungen wie große — aber nicht denselben Etat und keine eigene IT. Das Small Office Solution-Programm bringt Enterprise-Qualität in KMU-Dimensionen: bezahlbar, wartbar, verständlich.</p>
+    <div class="hero-actions">
+      <a href="/#kontakt" class="btn-primary">Kostenloses Erstgespräch</a>
+      <a href="/blog/index.html" class="btn-outline">Mehr erfahren</a>
+    </div>
+    <div class="pain-bar">
+      <div class="pain-item">
+        <div class="pain-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+          </svg>
+        </div>
+        <div class="pain-text"><span>Excel reicht nicht mehr</span>Daten in verschiedenen Dateien, kein gemeinsamer Stand, Fehler bei der Zusammenführung.</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="pain-text"><span>Software ohne Einblick</span>Ihre ERP- oder Buchhaltungslösung liefert keine Zahlen, die Sie wirklich verstehen.</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/>
+          </svg>
+        </div>
+        <div class="pain-text"><span>Keine IT-Ressourcen</span>Zu klein für einen IT-Leiter, zu komplex für Google-Suche. Wer hilft wirklich?</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="section-label">Pakete</div>
+  <h2>Was wir anbieten</h2>
+  <p class="section-desc">Drei klar definierte Pakete, die wachsen wenn Sie wachsen. Alle Preise auf Anfrage — je nach Situation.</p>
+  <div class="packages">
+    <div class="pkg">
+      <div class="pkg-name">Starter</div>
+      <div class="pkg-title">Datenbasis schaffen</div>
+      <div class="pkg-price">Einmalig · ab Anfrage</div>
+      <div class="pkg-features">
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Analyse Ihrer bestehenden Datensituation</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Strukturierter Datenbankaufbau (lokal oder Cloud)</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Migration bestehender Excel-Bestände</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Einfache Auswertungen &amp; Berichte</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Übergabedokumentation</div>
+      </div>
+      <a href="/#kontakt" class="pkg-cta">Anfragen</a>
+    </div>
+    <div class="pkg highlight">
+      <div class="pkg-recommended">Beliebt</div>
+      <div class="pkg-name">Professional</div>
+      <div class="pkg-title">Vollständige Lösung</div>
+      <div class="pkg-price">Einmalig + optionale Wartung</div>
+      <div class="pkg-features">
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Alles aus Starter</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Automatisierte Datenpipelines</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Power BI Dashboard (2–3 Reports)</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Schulung Ihres Teams</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>3 Monate E-Mail-Support inklusive</div>
+      </div>
+      <a href="/#kontakt" class="pkg-cta">Anfragen</a>
+    </div>
+    <div class="pkg">
+      <div class="pkg-name">Managed</div>
+      <div class="pkg-title">Dauerhaft betreut</div>
+      <div class="pkg-price">Monatliches Retainer-Modell</div>
+      <div class="pkg-features">
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Alles aus Professional</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Laufende Systembetreuung</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Erweiterungen &amp; Anpassungen</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priorisierter Support (1 Werktag)</div>
+        <div class="pkg-feature"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Quartalsgespräch &amp; Roadmap</div>
+      </div>
+      <a href="/#kontakt" class="pkg-cta">Anfragen</a>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="section-label">Typische Situationen</div>
+  <h2>Klingt das bekannt?</h2>
+  <div class="situations">
+    <div class="situation">
+      <div class="situation-q">"Wir haben alle Daten in Excel, aber niemand weiß mehr welche Version die aktuelle ist."</div>
+      <div class="situation-a">Ein strukturierter Datenbankaufbau mit klaren Eingabemasken und Versionierung löst dieses Problem dauerhaft — und ist für eine 5-Personen-Firma genauso umsetzbar wie für einen Konzern.</div>
+    </div>
+    <div class="situation">
+      <div class="situation-q">"Unser Chef will monatlich einen Umsatzbericht, der nimmt jeweils einen halben Tag zum Zusammenstellen."</div>
+      <div class="situation-a">Automatisierte Pipelines, die die Daten aus Ihrer Buchhaltungssoftware ziehen und in einen vorgefertigten Power BI-Report schreiben — einmal aufgebaut, läuft es von selbst.</div>
+    </div>
+    <div class="situation">
+      <div class="situation-q">"Wir wissen nicht wo unsere Daten überall gespeichert sind oder wer darauf zugreifen kann."</div>
+      <div class="situation-a">Ein einfaches Daten-Audit gibt Klarheit: was existiert wo, wer hat Zugriff, was muss aus Datenschutzsicht geändert werden. Kompakt, verständlich, ohne IT-Fachjargon.</div>
+    </div>
+    <div class="situation">
+      <div class="situation-q">"Wir haben ein neues ERP-System eingeführt, kommen aber an die Daten nicht richtig ran."</div>
+      <div class="situation-a">Die meisten ERP-Systeme (auch Business Central, SAP, oder Lexware) haben offene Schnittstellen. Wir bauen die Brücke zu Auswertungen, die Ihre Mitarbeiter wirklich nutzen.</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="section-label">Vorgehen</div>
+  <h2>Einfach und transparent</h2>
+  <div class="simple-steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Erstgespräch</div>
+      <div class="step-desc">45 Minuten, kostenlos. Wir hören zu, stellen Fragen und verstehen Ihre Situation — ohne Verkaufsdruck.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Angebot</div>
+      <div class="step-desc">Klares Angebot mit Umfang, Zeitplan und Fixpreis. Keine bösen Überraschungen auf der Rechnung.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Umsetzung</div>
+      <div class="step-desc">Wir bauen, erklären jeden Schritt und holen regelmäßig Ihr Feedback. In Ihrer Sprache, nicht in IT-Fachbegriffen.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">Übergabe</div>
+      <div class="step-desc">Sie bekommen Dokumentation, die Sie wirklich verstehen, und Schulung für Ihr Team. Und Unterstützung danach.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="quote-box">
+    <div class="quote-text">"Enterprise-Qualität bedeutet nicht Enterprise-Komplexität. Ein kleines Büro verdient <em>genauso gute Systeme</em> — nur angepasst an seine Größe, seinen Etat und seine Realität."</div>
+    <div class="quote-author">Sven Bohnstedt · Senior Data Engineer, DAITA-CRAFTER</div>
+  </div>
+</section>
+
+<div class="cta-section">
+  <h2>Lassen Sie uns reden.</h2>
+  <p>Kostenloses Erstgespräch — 45 Minuten, auf Deutsch, ohne Fachchinesisch.</p>
+  <a href="/#kontakt" class="btn-white">Jetzt Termin anfragen</a>
+  <div class="cta-sub">Oder schreiben Sie direkt: hallo@daita-crafter.com</div>
+</div>
+
+<footer>
+  <span>© 2026 DAITA-CRAFTER · Sven Bohnstedt · Hamburg</span>
+  <a href="/data-platform.html">Data Platform</a>
+</footer>
+</body>
+</html>
+

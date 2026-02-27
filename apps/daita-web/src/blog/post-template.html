@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moderne Lakehouse-Architektur — DAITA-CRAFTER Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-600:#0078d4;--blue-700:#106ebe;--blue-50:#f0f6fd;--blue-100:#daeaf8;--blue-200:#b0d0f0;
+    --text-900:#0a1628;--text-700:#1e3a5f;--text-500:#4a6580;--text-300:#8fafc8;
+    --white:#ffffff;--surface:#f7fbff;--border:#d0e4f4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text-900);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:72px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;}
+  .logo{font-size:15px;font-weight:600;letter-spacing:0.06em;color:var(--text-900);text-transform:uppercase;text-decoration:none;}
+  .logo-dot{display:inline-block;width:6px;height:6px;background:var(--blue-600);border-radius:50%;margin:0 4px;vertical-align:middle;position:relative;top:-1px;}
+  nav ul{display:flex;gap:36px;list-style:none;}
+  nav ul a{font-size:14px;color:var(--text-500);text-decoration:none;transition:color 0.2s;}
+  nav ul a:hover{color:var(--blue-600);}
+  .nav-cta{padding:10px 24px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .nav-cta:hover{background:var(--blue-700);}
+  .post-wrap{max-width:800px;margin:0 auto;padding:64px 24px 96px;}
+  .post-back{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-300);text-decoration:none;margin-bottom:40px;transition:color 0.2s;}
+  .post-back:hover{color:var(--blue-600);}
+  .post-back svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+  .post-header{margin-bottom:48px;padding-bottom:48px;border-bottom:1px solid var(--border);}
+  .post-meta{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .post-tag{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-600);background:var(--blue-50);border:1px solid var(--blue-200);padding:3px 10px;}
+  .post-date{font-size:13px;color:var(--text-300);}
+  .post-read{font-size:13px;color:var(--text-300);}
+  .post-sep{color:var(--border);}
+  .post-title{font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,56px);font-weight:400;line-height:1.1;margin-bottom:20px;}
+  .post-intro{font-size:18px;color:var(--text-500);line-height:1.75;font-weight:300;}
+  .post-body{font-size:16px;line-height:1.8;color:var(--text-700);font-weight:300;}
+  .post-body p{margin-bottom:24px;}
+  .post-body h2{font-family:'Instrument Serif',serif;font-size:30px;font-weight:400;color:var(--text-900);margin:48px 0 20px;line-height:1.2;}
+  .post-body h3{font-size:17px;font-weight:500;color:var(--text-900);margin:32px 0 12px;}
+  .post-body ul,.post-body ol{margin:0 0 24px 24px;}
+  .post-body li{margin-bottom:8px;line-height:1.7;}
+  .post-body strong{font-weight:600;color:var(--text-900);}
+  .post-body em{font-style:italic;color:var(--text-500);}
+  .post-body a{color:var(--blue-600);text-decoration:none;border-bottom:1px solid var(--blue-200);}
+  .post-body a:hover{border-color:var(--blue-600);}
+  .post-body blockquote{border-left:3px solid var(--blue-600);padding:4px 0 4px 24px;margin:32px 0;color:var(--text-500);}
+  .post-body blockquote p{font-size:18px;font-style:italic;margin:0;}
+  .post-body pre{background:var(--surface);border:1px solid var(--border);padding:24px;margin:24px 0;overflow-x:auto;font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.6;}
+  .post-body code{background:var(--surface);border:1px solid var(--border);padding:2px 6px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;}
+  .post-body pre code{background:none;border:none;padding:0;}
+  .callout{background:var(--blue-50);border:1px solid var(--blue-200);border-left:3px solid var(--blue-600);padding:20px 24px;margin:32px 0;}
+  .callout p{font-size:14px;color:var(--text-700);line-height:1.7;margin:0;}
+  .callout strong{color:var(--blue-600);}
+  .post-footer{margin-top:64px;padding-top:48px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+  .author-box{display:flex;gap:20px;align-items:flex-start;}
+  .author-avatar{width:56px;height:56px;background:var(--blue-50);border:1px solid var(--blue-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .author-avatar svg{width:24px;height:24px;stroke:var(--blue-600);fill:none;}
+  .author-name{font-size:15px;font-weight:500;color:var(--text-900);margin-bottom:4px;}
+  .author-role{font-size:13px;color:var(--text-300);margin-bottom:8px;font-weight:300;}
+  .author-bio{font-size:13px;color:var(--text-500);line-height:1.6;font-weight:300;}
+  .post-cta-box{background:var(--surface);border:1px solid var(--border);padding:28px;}
+  .post-cta-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-300);margin-bottom:12px;}
+  .post-cta-text{font-size:14px;color:var(--text-700);line-height:1.6;margin-bottom:20px;font-weight:300;}
+  .btn-cta{display:inline-block;padding:11px 20px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:13px;font-weight:500;text-decoration:none;transition:background 0.2s;}
+  .btn-cta:hover{background:var(--blue-700);}
+  footer{border-top:1px solid var(--border);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;max-width:1440px;margin:0 auto;}
+  footer span{font-size:13px;color:var(--text-300);}
+  footer a{font-size:13px;color:var(--blue-600);text-decoration:none;}
+  @media(max-width:760px){
+    nav{padding:0 24px;} nav ul{display:none;}
+    .post-footer{grid-template-columns:1fr;}
+    footer{padding:24px;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">DAITA<span class="logo-dot"></span>CRAFTER</a>
+  <ul>
+    <li><a href="/#leistungen">Leistungen</a></li>
+    <li><a href="/blog/index.html">Blog</a></li>
+    <li><a href="/data-platform.html">Data Platform</a></li>
+    <li><a href="/sos.html">Small Office</a></li>
+    <li><a href="/#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="/#kontakt" class="nav-cta">Kostenloses Gespräch</a>
+</nav>
+
+<div class="post-wrap">
+  <a href="/blog/index.html" class="post-back">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Zurück zum Blog
+  </a>
+
+  <div class="post-header">
+    <div class="post-meta">
+      <span class="post-tag">Data Engineering</span>
+      <span class="post-sep">·</span>
+      <span class="post-date">Februar 2026</span>
+      <span class="post-sep">·</span>
+      <span class="post-read">8 min Lesezeit</span>
+    </div>
+    <h1 class="post-title">Moderne Lakehouse-Architektur: Warum DuckDB und MinIO den Enterprise-Stack herausfordern</h1>
+    <p class="post-intro">Open-Source trifft auf Enterprise-Anforderungen. Wie eine Kombination aus MinIO, DuckDB und Apache Airflow eine vollwertige Datenplattform für einen Bruchteil der Kosten kommerzieller Lösungen bietet — und wo die Grenzen liegen.</p>
+  </div>
+
+  <div class="post-body">
+
+    <p>Die klassische Datenplattform eines mittelständischen Unternehmens sieht oft so aus: Azure Synapse oder Snowflake für die Datenhaltung, Azure Data Factory für die Pipelines, Power BI für die Auswertung. Funktioniert. Kostet aber schnell 3.000–8.000 Euro pro Monat allein für Cloud-Services — bevor ein einziger Berater seine Rechnung stellt.</p>
+
+    <p>Die Alternative, die in den letzten zwei Jahren ernsthaft praxistauglich geworden ist: ein Open-Source-Lakehouse-Stack, der auf Standard-Hardware läuft, vollständig selbst kontrolliert werden kann und bei einem Bruchteil der Kosten liegt.</p>
+
+    <h2>Was ist ein Lakehouse überhaupt?</h2>
+
+    <p>Ein Data Lake speichert Rohdaten beliebiger Form und Größe — unstrukturiert, günstig, skalierbar. Ein Data Warehouse hingegen ist strukturiert, schnell abfragbar, aber teuer und unflexibel. Das <strong>Lakehouse-Konzept</strong> verbindet beide: Rohdatenspeicher im Lake-Format, aber mit der Abfrageperformance und dem Transaktionsmodell eines Warehouses.</p>
+
+    <div class="callout">
+      <p><strong>Kernprinzip:</strong> Daten liegen als offene Dateiformate (Parquet, ORC) in objektorientiertem Speicher. Eine Tabellenebene (Iceberg, Delta Lake, Hudi) bringt ACID-Transaktionen und Schema-Evolution. Abfrage-Engines lesen direkt — ohne proprietäre Zwischenschichten.</p>
+    </div>
+
+    <h2>Der Stack im Detail</h2>
+
+    <h3>MinIO als S3-kompatibler Objektspeicher</h3>
+
+    <p>MinIO ist ein hochperformanter Objektspeicher, der die S3-API vollständig implementiert. Das bedeutet: jedes Tool, das S3 unterstützt — und das sind fast alle Datentools — funktioniert mit MinIO ohne Anpassungen. MinIO läuft auf eigener Hardware, in einer VM oder im Kubernetes-Cluster.</p>
+
+    <p>Für 10 TB Daten zahlen Sie bei AWS S3 etwa 230 Euro pro Monat. Bei MinIO auf einem eigenen Server: die Stromrechnung.</p>
+
+    <h3>DuckDB als Abfrage-Engine</h3>
+
+    <p>DuckDB ist eine eingebettete OLAP-Datenbank, die direkt auf Parquet-Dateien in MinIO (über S3-Protokoll) arbeitet — ohne Daten vorher zu importieren. Die Abfragegeschwindigkeit ist beeindruckend: 10 GB Daten in unter 3 Sekunden aggregieren ist keine Seltenheit.</p>
+
+    <pre><code>-- DuckDB liest direkt aus MinIO/S3
+SELECT
+  date_trunc('month', order_date) AS month,
+  SUM(revenue) AS total_revenue,
+  COUNT(DISTINCT customer_id) AS unique_customers
+FROM read_parquet('s3://datalake/orders/year=2025/**/*.parquet')
+GROUP BY 1
+ORDER BY 1;</code></pre>
+
+    <h3>Apache Airflow für Orchestrierung</h3>
+
+    <p>Airflow orchestriert die ETL-Prozesse — wann welche Pipeline läuft, was bei Fehlern passiert, welche Abhängigkeiten existieren. Mit DAG Factory lassen sich Pipelines deklarativ in YAML definieren, ohne Python-Code schreiben zu müssen.</p>
+
+    <h2>Wo die Grenzen liegen</h2>
+
+    <p>Ehrlichkeit ist angebracht: Der Open-Source-Stack erfordert mehr technisches Know-how beim Aufbau. Wer kein IT-Team hat, ist auf externe Expertise angewiesen. Außerdem fehlen — Stand heute — die ausgereiften Enterprise-Features kommerzieller Lösungen in Bereichen wie Data Governance, automatisches Schema-Management und integriertem Monitoring.</p>
+
+    <p>Für Unternehmen mit genuinen Enterprise-Anforderungen (hunderte Nutzer, Compliance-Anforderungen, globale Teams) bleibt Snowflake oder Databricks eine valide Wahl. Für den Mittelstand mit 10–100 Datennutzern und überschaubaren Datenmengen ist der Open-Source-Stack heute eine ernsthafte Alternative.</p>
+
+    <blockquote>
+      <p>Die beste Datenplattform ist nicht die teuerste — sondern die, die Ihr Team tatsächlich nutzt und die Ihr Unternehmen sich langfristig leisten kann.</p>
+    </blockquote>
+
+    <h2>Fazit</h2>
+
+    <p>MinIO + DuckDB + Airflow ist kein Spielzeug mehr. Es ist ein ernsthafter Stack für produktive Datenplattformen im Mittelstand. Die Voraussetzungen: technische Kompetenz beim Aufbau, sorgfältige Planung, und die Bereitschaft, mit einem kleineren Feature-Set zu starten — das dafür langfristig kontrollierbar bleibt.</p>
+
+    <p>In einem der nächsten Beiträge schauen wir uns an, wie man diesen Stack konkret auf einem einzelnen Server aufsetzt und welche Konfigurationen sich bewährt haben.</p>
+
+  </div>
+
+  <div class="post-footer">
+    <div class="author-box">
+      <div class="author-avatar">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="author-name">Sven Bohnstedt</div>
+        <div class="author-role">Senior Data Engineer · DAITA-CRAFTER</div>
+        <div class="author-bio">10+ Jahre Erfahrung in Enterprise-Datenarchitektur. Azure DP-203 zertifiziert. Schwerpunkt auf pragmatischen, kosteneffizienten Lösungen für den Mittelstand.</div>
+      </div>
+    </div>
+    <div class="post-cta-box">
+      <div class="post-cta-label">Projekt besprechen</div>
+      <div class="post-cta-text">Interesse an einer modernen Datenplattform für Ihr Unternehmen? Kostenloses Erstgespräch, 45 Minuten, ohne Verkaufsdruck.</div>
+      <a href="/#kontakt" class="btn-cta">Kontakt aufnehmen</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 DAITA-CRAFTER · Sven Bohnstedt · Hamburg</span>
+  <a href="/blog/index.html">Mehr Artikel</a>
+</footer>
+</body>
+</html>
+

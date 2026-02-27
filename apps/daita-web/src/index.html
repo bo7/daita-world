@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAITA-CRAFTER — Sven Bohnstedt · Senior Data Engineer & Solutions Architect</title>
+<meta name="description" content="Freelance Senior Data Engineer und Solutions Architect aus Hamburg. Azure, DWH, ML-Plattformen, ETL-Pipelines und Prozessautomatisierung für Enterprise-Kunden.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-600: #0078d4;
+    --blue-700: #106ebe;
+    --blue-800: #005a9e;
+    --blue-50:  #f0f6fd;
+    --blue-100: #daeaf8;
+    --blue-200: #b0d0f0;
+    --sky: #50e6ff;
+    --text-900: #0a1628;
+    --text-700: #1e3a5f;
+    --text-500: #4a6580;
+    --text-300: #8fafc8;
+    --white: #ffffff;
+    --surface: #f7fbff;
+    --border: #d0e4f4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--white);
+    color: var(--text-900);
+    min-height: 100vh;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 64px;
+    height: 72px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text-900);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .logo-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--blue-600);
+    border-radius: 50%;
+    margin: 0 4px;
+    vertical-align: middle;
+    position: relative; top: -1px;
+  }
+  nav ul { display: flex; gap: 36px; list-style: none; }
+  nav ul a {
+    font-size: 14px; font-weight: 400;
+    color: var(--text-500); text-decoration: none;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--blue-600); }
+  .nav-cta {
+    padding: 10px 24px;
+    background: var(--blue-600); color: var(--white);
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    border: none; border-radius: 2px; cursor: pointer;
+    transition: background 0.2s; text-decoration: none;
+    display: inline-block;
+  }
+  .nav-cta:hover { background: var(--blue-700); }
+
+  /* ─── HERO ─── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 560px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-left {
+    padding: 80px 64px;
+    display: flex; flex-direction: column; justify-content: center;
+    border-right: 1px solid var(--border);
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 32px;
+  }
+  .eyebrow-badge {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--blue-600); background: var(--blue-50);
+    border: 1px solid var(--blue-200); padding: 4px 12px;
+  }
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(38px, 4.5vw, 64px);
+    font-weight: 400; line-height: 1.1;
+    color: var(--text-900); margin-bottom: 24px;
+  }
+  h1 em { color: var(--blue-600); font-style: italic; }
+  .hero-desc {
+    font-size: 16px; line-height: 1.75;
+    color: var(--text-500); max-width: 440px;
+    margin-bottom: 40px; font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 14px 28px; background: var(--blue-600); color: var(--white);
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    border: none; cursor: pointer; transition: background 0.2s; border-radius: 2px;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--blue-700); }
+  .btn-outline {
+    padding: 14px 28px; background: transparent; color: var(--blue-600);
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    border: 1px solid var(--blue-200); cursor: pointer; border-radius: 2px;
+    transition: background 0.2s; text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { background: var(--blue-50); }
+
+  .hero-right {
+    background: var(--surface); padding: 64px;
+    display: flex; flex-direction: column; gap: 24px; justify-content: center;
+  }
+  .hero-stat { border-left: 3px solid var(--blue-600); padding: 0 0 0 24px; }
+  .hero-stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 52px; line-height: 1; color: var(--text-900); font-weight: 400;
+  }
+  .hero-stat-num span { color: var(--blue-600); }
+  .hero-stat-label { font-size: 14px; color: var(--text-500); margin-top: 4px; font-weight: 300; }
+  .hero-stat-divider { height: 1px; background: var(--border); }
+
+  /* ─── SECTION ─── */
+  section { padding: 80px 64px; max-width: 1440px; margin: 0 auto; }
+  .section-header {
+    display: flex; align-items: baseline;
+    justify-content: space-between; margin-bottom: 48px;
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px; font-weight: 400; color: var(--text-900);
+  }
+  .section-link { font-size: 14px; color: var(--blue-600); text-decoration: none; font-weight: 500; }
+  .section-link:hover { text-decoration: underline; }
+
+  /* ─── TILES ─── */
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .tile {
+    background: var(--white); border: 1px solid var(--border);
+    padding: 36px; position: relative;
+    transition: box-shadow 0.3s, border-color 0.3s;
+    border-radius: 2px; overflow: hidden;
+  }
+  .tile:hover {
+    box-shadow: 0 8px 32px rgba(0,120,212,0.1);
+    border-color: var(--blue-200);
+  }
+  .tile-col-8 { grid-column: span 8; }
+  .tile-col-4 { grid-column: span 4; }
+  .tile-col-6 { grid-column: span 6; }
+  .tile-col-4a { grid-column: span 4; }
+  .tile-col-3 { grid-column: span 3; }
+
+  .tile-accent {
+    background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+    border-color: transparent; color: var(--white);
+  }
+  .tile-accent:hover { box-shadow: 0 8px 40px rgba(0,120,212,0.35); border-color: transparent; }
+  .tile-accent h3, .tile-accent .tile-tag { color: rgba(255,255,255,0.75); }
+  .tile-accent h3 { color: var(--white); font-size: 24px; }
+  .tile-accent p { color: rgba(255,255,255,0.75); }
+  .tile-accent::after {
+    content: ''; position: absolute;
+    top: -60px; right: -60px; width: 200px; height: 200px;
+    background: rgba(255,255,255,0.06); border-radius: 50%;
+  }
+  .tile-light { background: var(--blue-50); border-color: var(--blue-100); }
+
+  .tile-tag {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--blue-600); margin-bottom: 16px;
+  }
+  .tile h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; font-weight: 400;
+    color: var(--text-900); margin-bottom: 12px; line-height: 1.3;
+  }
+  .tile p { font-size: 14px; color: var(--text-500); line-height: 1.7; font-weight: 300; }
+  .tile-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px; font-weight: 400; color: var(--blue-600); line-height: 1; margin-bottom: 12px;
+  }
+  .tile-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 20px; font-size: 13px; font-weight: 500;
+    color: var(--blue-600); text-decoration: none;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .tile:hover .tile-link { opacity: 1; }
+  .tile-accent:hover .tile-link { color: rgba(255,255,255,0.9); }
+
+  /* Tag list inside tiles */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    padding: 4px 10px; background: var(--blue-50);
+    border: 1px solid var(--blue-200); color: var(--blue-700); border-radius: 2px;
+  }
+  .tile-accent .tag { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); }
+
+  /* ─── PROJEKTE ─── */
+  .project-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .project-card {
+    background: var(--white); border: 1px solid var(--border);
+    padding: 36px; border-radius: 2px;
+    transition: box-shadow 0.3s, border-color 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .project-card:hover { box-shadow: 0 8px 32px rgba(0,120,212,0.1); border-color: var(--blue-200); }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--blue-600);
+  }
+  .project-industry {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue-600); margin-bottom: 16px;
+  }
+  .project-card h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px; font-weight: 400; margin-bottom: 12px; line-height: 1.3;
+  }
+  .project-card p { font-size: 14px; color: var(--text-500); line-height: 1.7; font-weight: 300; }
+
+  /* ─── ERFAHRUNG TIMELINE ─── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .timeline-item {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 40px; padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-item:first-child { padding-top: 0; }
+  .timeline-meta {}
+  .timeline-period {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--blue-600); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .timeline-company { font-size: 13px; color: var(--text-500); line-height: 1.4; }
+  .timeline-content h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; font-weight: 400; margin-bottom: 12px;
+  }
+  .timeline-content p { font-size: 14px; color: var(--text-500); line-height: 1.7; font-weight: 300; }
+
+  /* ─── TECH STACK ─── */
+  .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stack-card {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 28px; border-radius: 2px;
+  }
+  .stack-card h4 {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--blue-600); margin-bottom: 14px;
+  }
+  .stack-items { display: flex; flex-direction: column; gap: 6px; }
+  .stack-item { font-size: 14px; color: var(--text-700); font-weight: 400; }
+
+  /* ─── BLOG PREVIEW ─── */
+  .blog-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .blog-card {
+    background: var(--white); border: 1px solid var(--border);
+    padding: 36px; border-radius: 2px;
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .blog-card:hover { box-shadow: 0 8px 32px rgba(0,120,212,0.08); border-color: var(--blue-200); }
+  .blog-meta { font-size: 12px; color: var(--text-300); margin-bottom: 12px; letter-spacing: 0.04em; }
+  .blog-card h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px; font-weight: 400; margin-bottom: 12px; line-height: 1.35;
+  }
+  .blog-card p { font-size: 13px; color: var(--text-500); line-height: 1.65; font-weight: 300; }
+  .blog-read {
+    display: inline-block; margin-top: 20px;
+    font-size: 13px; font-weight: 500; color: var(--blue-600); text-decoration: none;
+  }
+  .blog-read:hover { text-decoration: underline; }
+
+  /* ─── KONTAKT ─── */
+  .contact-wrapper {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 64px; align-items: start;
+  }
+  .contact-info h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 40px; font-weight: 400; margin-bottom: 20px; line-height: 1.2;
+  }
+  .contact-info p { font-size: 15px; color: var(--text-500); line-height: 1.7; font-weight: 300; margin-bottom: 32px; }
+  .contact-detail {
+    display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px;
+  }
+  .contact-row { display: flex; align-items: center; gap: 14px; }
+  .contact-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-300); width: 80px; }
+  .contact-value { font-size: 14px; color: var(--text-700); text-decoration: none; }
+  .contact-value:hover { color: var(--blue-600); }
+
+  /* FORM */
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-500); }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: inherit; font-size: 14px; color: var(--text-900);
+    background: var(--white);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--blue-600); }
+  .form-group textarea { min-height: 140px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit {
+    padding: 16px 32px; background: var(--blue-600); color: var(--white);
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    border: none; border-radius: 2px; cursor: pointer;
+    transition: background 0.2s; align-self: flex-start;
+  }
+  .form-submit:hover { background: var(--blue-700); }
+  .form-note { font-size: 12px; color: var(--text-300); }
+
+  /* ─── CTA BANNER ─── */
+  .cta-banner {
+    max-width: 1312px;
+    margin: 0 auto 80px;
+    background: linear-gradient(135deg, #0078d4, #005a9e);
+    padding: 64px; display: flex; align-items: center;
+    justify-content: space-between; border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner-outer {
+    padding: 0 64px;
+  }
+  .cta-banner::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px; width: 360px; height: 360px;
+    background: rgba(255,255,255,0.05); border-radius: 50%;
+  }
+  .cta-banner h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 38px; font-weight: 400; color: var(--white);
+    max-width: 500px; line-height: 1.2;
+  }
+  .btn-white {
+    padding: 16px 36px; background: var(--white); color: var(--blue-600);
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    border: none; cursor: pointer; border-radius: 2px;
+    white-space: nowrap; transition: transform 0.2s; text-decoration: none;
+    display: inline-block;
+  }
+  .btn-white:hover { transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 64px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p { font-size: 13px; color: var(--text-300); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { font-size: 13px; color: var(--text-300); text-decoration: none; }
+  .footer-links a:hover { color: var(--blue-600); }
+
+  /* ─── SECTION BG VARIANTS ─── */
+  .section-alt { background: var(--surface); padding: 80px 64px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .section-alt .section-title, .section-alt h2 { color: var(--text-900); }
+
+  /* ─── CERTS ─── */
+  .cert-list { display: flex; flex-wrap: wrap; gap: 12px; }
+  .cert-badge {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; background: var(--white);
+    border: 1px solid var(--border); border-radius: 2px;
+    font-size: 13px; font-weight: 500; color: var(--text-700);
+  }
+  .cert-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--blue-600); border-radius: 50%; flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">DAITA<span class="logo-dot"></span>CRAFTER</a>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projekte">Projekte</a></li>
+    <li><a href="#erfahrung">Erfahrung</a></li>
+    <li><a href="/blog.html">Blog</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="#kontakt" class="nav-cta">Gespräch vereinbaren</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">
+      <span class="eyebrow-badge">Hamburg · Freelance · Azure Certified</span>
+    </div>
+    <h1>Senior Data Engineer<br>für <em>Enterprise</em><br>Lösungen.</h1>
+    <p class="hero-desc">10+ Jahre Erfahrung in End-to-End-Datenplattformen, ML-Infrastruktur und skalierbaren ETL-Pipelines — für Medizin, Automotive OEM und E-Commerce.</p>
+    <div class="hero-actions">
+      <a href="#kontakt" class="btn-primary">Projekt besprechen</a>
+      <a href="#projekte" class="btn-outline">Aktuelle Projekte →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hero-stat-num">10<span>+</span></div>
+      <div class="hero-stat-label">Jahre Data Engineering Erfahrung</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-label">aktive Freelance-Projekte (seit 09/2025)</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">DP<span>-203</span></div>
+      <div class="hero-stat-label">Microsoft Azure Data Engineer Associate</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header">
+    <h2 class="section-title">Was ich für Sie tue</h2>
+    <a href="#kontakt" class="section-link">Anfrage stellen →</a>
+  </div>
+
+  <div class="tile-grid">
+
+    <div class="tile tile-col-8 tile-accent">
+      <div class="tile-tag">Kernleistung</div>
+      <h3>DWH-Architektur & End-to-End Datenpipelines</h3>
+      <p>Von der Quelldatenbank bis zum analytischen Dashboard — vollständige Data-Warehouse-Lösungen in Azure Synapse, hybriden und On-Premises-Umgebungen. SSIS, dbt, Airflow und Dagster als Transformations- und Orchestrierungsschicht.</p>
+      <div class="tag-list">
+        <span class="tag">Azure Synapse</span>
+        <span class="tag">SSIS</span>
+        <span class="tag">dbt</span>
+        <span class="tag">Airflow</span>
+      </div>
+      <a href="#projekte" class="tile-link">Projekte ansehen →</a>
+    </div>
+
+    <div class="tile tile-col-4 tile-light">
+      <div class="tile-tag">ML & Analytics</div>
+      <div class="tile-num">ML</div>
+      <h3>Machine Learning Plattformen</h3>
+      <p>Predictive Analytics, Recommender Systeme und Wartungsvorhersagen — auf Databricks und Azure.</p>
+      <a href="#projekte" class="tile-link">Mehr →</a>
+    </div>
+
+    <div class="tile tile-col-4a">
+      <div class="tile-tag">Cloud</div>
+      <h3>Azure Data Engineering</h3>
+      <p>Azure Synapse, ADF, DevOps — zertifizierte Cloud-Architekturen für skalierbare Datenprozesse.</p>
+      <div class="tag-list">
+        <span class="tag">Azure</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Git</span>
+      </div>
+      <a href="#kontakt" class="tile-link">Anfragen →</a>
+    </div>
+
+    <div class="tile tile-col-4a">
+      <div class="tile-tag">Reporting</div>
+      <h3>BI & Visualisierung</h3>
+      <p>Entscheidungsrelevante Dashboards mit durchdachter Logik. Business Central, Reporting-Frontends und KPI-Definitionen.</p>
+      <a href="#kontakt" class="tile-link">Beispiele anfragen →</a>
+    </div>
+
+    <div class="tile tile-col-4a">
+      <div class="tile-tag">Automatisierung & KI</div>
+      <h3>Prozessautomatisierung</h3>
+      <p>Intelligente Workflows ersetzen manuelle Prozesse — modular, skalierbar, messbar effizient.</p>
+      <a href="#kontakt" class="tile-link">Use Cases →</a>
+    </div>
+
+    <div class="tile tile-col-6">
+      <div class="tile-tag">ERP & SQL</div>
+      <h3>Business Central & SQL Server</h3>
+      <p>Komplexe T-SQL-Abfragen, Performance-Tuning und Datenmodellierung für Microsoft ERP-Systeme. MSSQL, MySQL, PySpark — in Enterprise-Projekten mit Millionen von Datensätzen bewährt.</p>
+      <a href="#erfahrung" class="tile-link">Erfahrung ansehen →</a>
+    </div>
+
+    <div class="tile tile-col-6">
+      <div class="tile-tag">Sprachen & Plattformen</div>
+      <h3>Python, PySpark & SQL</h3>
+      <p>Prädiktive Modelle, Feature Engineering und Datenverarbeitung mit Python und PySpark. ML-Libraries, Recommender Engines und statistische Analysen für Enterprise-Anwendungsfälle.</p>
+      <div class="tag-list">
+        <span class="tag">Python</span>
+        <span class="tag">PySpark</span>
+        <span class="tag">T-SQL</span>
+        <span class="tag">R</span>
+      </div>
+      <a href="#kontakt" class="tile-link">Anfragen →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- AKTUELLE PROJEKTE -->
+<div class="section-alt">
+  <section id="projekte" style="padding: 0; max-width: 1440px; margin: 0 auto;">
+    <div class="section-header">
+      <h2 class="section-title">Aktuelle Freelance-Projekte</h2>
+      <span style="font-size:13px; color: var(--text-300);">seit September 2025</span>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-industry">Medizintechnik · Hybrid DWH</div>
+        <h3>Business Central On-Prem & Azure Data Warehouse</h3>
+        <p>Hybrid-DWH-Architektur mit Business Central On-Premises und Azure Cloud Services. End-to-End ETL mit SSIS als Datenpumpe zwischen On-Prem SQL Server und cloudbasierten Analytics-Schichten. Vollständige Datenfluss-Modellierung vom Quellenextrakt bis zum Business Reporting.</p>
+        <div class="tag-list" style="margin-top: 20px;">
+          <span class="tag">Business Central</span>
+          <span class="tag">SSIS</span>
+          <span class="tag">Azure</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-industry">Automotive OEM · ML Platform</div>
+        <h3>ML-Plattform für Werkstatt & Garantieoperationen</h3>
+        <p>Machine-Learning-Plattform zur Optimierung von Werkstattplanung und Garantieabwicklung. Prädiktive Modelle für Garantiekostenschätzung und Ursachenanalyse von Serienfehlern. Skalierbare Datenpipelines zur Versorgung der ML-Modelle mit strukturierten Werkstatt- und Schadendaten.</p>
+        <div class="tag-list" style="margin-top: 20px;">
+          <span class="tag">Python</span>
+          <span class="tag">ML</span>
+          <span class="tag">Predictive Analytics</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-industry">Automotive OEM · Databricks · NutzFahrzeuge</div>
+        <h3>Predictive Maintenance auf Databricks / Azure</h3>
+        <p>Aufbau einer Databricks-basierten Predictive-Maintenance-Plattform in Azure für einen Hersteller von Trucks und Bussen. Sensor- und Telemetriedaten der Fahrzeugflotte werden ingested, feature-engineered und zu Ausfallvorhersagen verarbeitet — Ziel: Reduktion ungeplanter Standzeiten.</p>
+        <div class="tag-list" style="margin-top: 20px;">
+          <span class="tag">Databricks</span>
+          <span class="tag">Azure</span>
+          <span class="tag">PySpark</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ERFAHRUNG -->
+<section id="erfahrung">
+  <div class="section-header">
+    <h2 class="section-title">Berufliche Erfahrung</h2>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-meta">
+        <div class="timeline-period">09/2025 – Heute</div>
+        <div class="timeline-company">daita-crafter<br>Hamburg · Freelance</div>
+      </div>
+      <div class="timeline-content">
+        <h3>Freelance Senior Data Engineer & Solutions Architect</h3>
+        <p>Selbstständige Beratung und Umsetzung von End-to-End-Datenlösungen und ML-Plattformen für Enterprise-Kunden. Hybrid-DWH-Architekturen für den Medizinbereich, ML-Plattformen für Automotive OEM, Databricks-basierte Predictive-Maintenance-Systeme und skalierbare Prozessautomatisierung.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">
+        <div class="timeline-period">04/2023 – 08/2025</div>
+        <div class="timeline-company">celver AG<br>Hamburg</div>
+      </div>
+      <div class="timeline-content">
+        <h3>Senior Data Engineer</h3>
+        <p>DWH-Lösungen in Azure Synapse, hybriden und On-Premises-Umgebungen für Enterprise-Kunden in E-Commerce, Medizin und Automotive. Komplexe T-SQL- und Python-Workflows, prädiktive Umsatzprognosen und Recommender Engines. dbt On-Premises für SAP-Datenintegration (60+ Quelltabellen, MDAX-Planung über vier Geschäftsbereiche) sowie QSR-Datenprojekte.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">
+        <div class="timeline-period">01/2017 – 02/2023</div>
+        <div class="timeline-company">Sileo GmbH<br>Salzgitter</div>
+      </div>
+      <div class="timeline-content">
+        <h3>Head of Sales</h3>
+        <p>Leitung aller Vertriebsaktivitäten in der DACH-Region mit Auftragsvolumen über 25 Mio. EUR. Komplexe öffentliche und private Ausschreibungsprozesse bis 20 Mio. EUR. POC für prädiktive Batteriezell-Fehleranalyse mit Python und Dash. Repräsentation als OEM in der Industriestandardisierung (VDV 238).</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">
+        <div class="timeline-period">11/2011 – 11/2014</div>
+        <div class="timeline-company">nextel BI Solutions<br>Hamburg</div>
+      </div>
+      <div class="timeline-content">
+        <h3>BI Consultant</h3>
+        <p>BI- und DWH-Projekte im E-Commerce auf Microsoft BI Stack. KPI-Entwicklung, Fulfillment-Performance-Monitoring und Konsolidierungssoftware für Schiffsinvestments.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<div class="section-alt">
+  <section style="padding: 0; max-width: 1440px; margin: 0 auto;">
+    <div class="section-header">
+      <h2 class="section-title">Technology Stack</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <h4>Sprachen</h4>
+        <div class="stack-items">
+          <span class="stack-item">Python & PySpark</span>
+          <span class="stack-item">SQL / T-SQL / MSSQL</span>
+          <span class="stack-item">MySQL</span>
+          <span class="stack-item">R</span>
+        </div>
+      </div>
+      <div class="stack-card">
+        <h4>Cloud & DevOps</h4>
+        <div class="stack-items">
+          <span class="stack-item">Azure Synapse & ADF</span>
+          <span class="stack-item">Azure DevOps</span>
+          <span class="stack-item">Databricks</span>
+          <span class="stack-item">Docker & Git / Linux</span>
+        </div>
+      </div>
+      <div class="stack-card">
+        <h4>Data Engineering</h4>
+        <div class="stack-items">
+          <span class="stack-item">SSIS</span>
+          <span class="stack-item">dbt (On-Premises)</span>
+          <span class="stack-item">Apache Airflow & Dagster</span>
+          <span class="stack-item">Business Central / ERP</span>
+        </div>
+      </div>
+      <div class="stack-card">
+        <h4>Analytics & ML</h4>
+        <div class="stack-items">
+          <span class="stack-item">Machine Learning</span>
+          <span class="stack-item">Predictive Analytics</span>
+          <span class="stack-item">Recommender Systems</span>
+          <span class="stack-item">Reporting & Dashboards</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cert-list" style="margin-top: 32px;">
+      <div class="cert-badge">Microsoft Azure Data Engineer Associate (DP-203)</div>
+      <div class="cert-badge">Diploma Wirtschaftsinformatik — FH Wedel</div>
+      <div class="cert-badge">Python & Data Analysis (edX / Coursera)</div>
+      <div class="cert-badge">Electric Buses — UITP Barcelona</div>
+    </div>
+  </section>
+</div>
+
+<!-- BLOG PREVIEW -->
+<section id="blog">
+  <div class="section-header">
+    <h2 class="section-title">Aus dem Blog</h2>
+    <a href="/blog.html" class="section-link">Alle Artikel →</a>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card">
+      <div class="blog-meta">Data Engineering · 15. Januar 2026</div>
+      <h3>dbt On-Premises: Warum der lokale Transformations-Stack oft der bessere Weg ist</h3>
+      <p>Cloud-native ist nicht immer die richtige Antwort. Ein Erfahrungsbericht aus zwei Jahren dbt On-Prem mit SAP-Quellsystemen und MDAX-Planung.</p>
+      <a href="/blog.html" class="blog-read">Weiterlesen →</a>
+    </div>
+    <div class="blog-card">
+      <div class="blog-meta">Automotive · ML · 28. November 2025</div>
+      <h3>Predictive Maintenance auf Databricks: Von Telemetriedaten zur Ausfallvorhersage</h3>
+      <p>Wie ein End-to-End ML-Pipeline-Design auf Azure Databricks für Truck-Flotten aussieht — von der Rohdaten-Ingestion bis zum Deployment.</p>
+      <a href="/blog.html" class="blog-read">Weiterlesen →</a>
+    </div>
+    <div class="blog-card">
+      <div class="blog-meta">DWH · Architektur · 5. Oktober 2025</div>
+      <h3>Hybrid DWH mit Business Central: On-Prem trifft Azure</h3>
+      <p>Wenn ERP-Systeme nicht in die Cloud wandern können oder dürfen — Architekturmuster für hybride Data-Warehouse-Lösungen aus der Praxis.</p>
+      <a href="/blog.html" class="blog-read">Weiterlesen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div style="padding: 0 64px;">
+<div class="cta-banner">
+  <h2>Bereit, Ihr nächstes Datenprojekt zu starten?</h2>
+  <a href="#kontakt" class="btn-white">Kostenloses Erstgespräch</a>
+</div>
+</div>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="contact-wrapper">
+    <div class="contact-info">
+      <h2>Lassen Sie uns sprechen.</h2>
+      <p>Ich bin offen für neue Projekte, Kooperationen und technische Herausforderungen. Schreiben Sie mir direkt oder nutzen Sie das Formular für eine strukturierte Anfrage.</p>
+      <div class="contact-detail">
+        <div class="contact-row">
+          <span class="contact-label">E-Mail</span>
+          <a href="mailto:sven@daita-crafter.com" class="contact-value">sven@daita-crafter.com</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Telefon</span>
+          <a href="tel:+4917186292219" class="contact-value">+49 171 862 92 19</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Standort</span>
+          <span class="contact-value">Hamburg, Deutschland</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">LinkedIn</span>
+          <a href="https://linkedin.com/in/svenbohnstedt" class="contact-value" target="_blank">linkedin.com/in/svenbohnstedt</a>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" action="/api/contact" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Max Mustermann" required>
+        </div>
+        <div class="form-group">
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" name="email" placeholder="max@firma.de" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="company">Unternehmen</label>
+        <input type="text" id="company" name="company" placeholder="Muster GmbH (optional)">
+      </div>
+      <div class="form-group">
+        <label for="subject">Thema</label>
+        <select id="subject" name="subject">
+          <option value="">Bitte auswählen...</option>
+          <option value="dwh">DWH-Architektur</option>
+          <option value="ml">ML-Plattform</option>
+          <option value="azure">Azure Data Engineering</option>
+          <option value="automation">Prozessautomatisierung</option>
+          <option value="other">Sonstiges</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Nachricht</label>
+        <textarea id="message" name="message" placeholder="Beschreiben Sie kurz Ihr Projekt oder Ihre Anfrage..." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">Nachricht senden</button>
+      <p class="form-note">Ich antworte in der Regel innerhalb von 24 Stunden.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 DAITA-CRAFTER · Sven Bohnstedt · Hamburg</p>
+  <div class="footer-links">
+    <a href="/blog.html">Blog</a>
+    <a href="/impressum.html">Impressum</a>
+    <a href="/datenschutz.html">Datenschutz</a>
+  </div>
+  <p>sven@daita-crafter.com</p>
+</footer>
+
+</body>
+</html>

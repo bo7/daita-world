@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Übersetzer — DAITA-CRAFTER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0078d4; --blue-dark: #005a9e; --green: #0e7a45;
+      --red: #c0392b; --bg: #f7fbff; --surface: #fff;
+      --border: #d0e4f4; --text: #0a1628; --text-2: #1e3a5f;
+      --text-3: #4a6580; --text-4: #8fafc8;
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    #app { display: none; }
+    .login-box { background: var(--surface); border: 1px solid var(--border); padding: 48px; width: 400px; }
+    .login-box h1 { font-size: 20px; font-weight: 700; color: var(--text-2); margin-bottom: 8px; }
+    .login-box p { font-size: 13px; color: var(--text-4); margin-bottom: 32px; }
+
+    header { background: var(--text-2); color: white; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 14px; font-weight: 600; letter-spacing: 0.1em; }
+    .header-right { display: flex; gap: 12px; align-items: center; font-size: 13px; color: #8fafc8; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 40px 32px; }
+    .page-title { font-size: 24px; font-weight: 700; color: var(--text-2); margin-bottom: 8px; }
+    .page-sub { font-size: 13px; color: var(--text-4); margin-bottom: 40px; }
+
+    .controls { background: var(--surface); border: 1px solid var(--border); padding: 28px; margin-bottom: 32px; display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 20px; align-items: end; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--text-4); }
+    select, input { border: 1px solid var(--border); padding: 10px 12px; font-family: inherit; font-size: 14px; color: var(--text); background: var(--bg); outline: none; width: 100%; }
+    select:focus, input:focus { border-color: var(--blue); background: var(--surface); }
+
+    .btn { padding: 10px 20px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; }
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .btn-primary:disabled { background: var(--border); color: var(--text-4); cursor: not-allowed; }
+    .btn-green { background: var(--green); color: white; }
+    .btn-green:hover:not(:disabled) { background: #0a5c33; }
+    .btn-green:disabled { background: var(--border); color: var(--text-4); cursor: not-allowed; }
+    .btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--border); }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--border); }
+
+    .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .file-card { background: var(--surface); border: 1px solid var(--border); padding: 16px; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 12px; }
+    .file-card:hover { border-color: var(--blue); }
+    .file-card.selected { border-color: var(--blue); background: #f0f6fd; }
+    .file-card.done { border-color: var(--green); }
+    .file-card.error-state { border-color: var(--red); }
+    .file-check { width: 18px; height: 18px; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+    .file-card.selected .file-check { border-color: var(--blue); background: var(--blue); color: white; }
+    .file-card.done .file-check { border-color: var(--green); background: var(--green); color: white; }
+    .file-card.error-state .file-check { border-color: var(--red); background: var(--red); color: white; }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name { font-size: 13px; font-weight: 500; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-path { font-size: 11px; color: var(--text-4); margin-top: 2px; }
+    .file-status { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; margin-top: 4px; }
+    .file-status.ok { color: var(--green); }
+    .file-status.err { color: var(--red); }
+    .file-status.busy { color: var(--blue); }
+
+    .progress-section { background: var(--surface); border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; display: none; }
+    .progress-section.visible { display: block; }
+    .progress-title { font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 16px; }
+    .progress-bar-outer { height: 6px; background: var(--border); margin-bottom: 8px; }
+    .progress-bar-inner { height: 100%; background: var(--green); transition: width 0.4s; }
+    .progress-text { font-size: 12px; color: var(--text-4); }
+    .progress-log { margin-top: 16px; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace; line-height: 1.8; color: var(--text-3); }
+
+    .action-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
+    .action-bar .count { font-size: 13px; color: var(--text-4); }
+
+    .lang-loading { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-4); }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text-2); color: white; padding: 14px 20px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
+    .toast.show { opacity: 1; }
+    .toast.error { background: var(--red); }
+
+    .existing-langs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 24px; }
+    .lang-badge { padding: 4px 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; background: #f0f6fd; color: var(--blue); border: 1px solid var(--border); cursor: pointer; }
+    .lang-badge:hover { border-color: var(--blue); }
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--text-4); margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Übersetzer</h1>
+    <p>DAITA-CRAFTER Privatbereich</p>
+    <div style="margin-bottom:16px;">
+      <div class="field-label" style="margin-bottom:6px;">E-MAIL</div>
+      <input type="email" id="login-email" style="width:100%;">
+    </div>
+    <div style="margin-bottom:24px;">
+      <div class="field-label" style="margin-bottom:6px;">PASSWORT</div>
+      <input type="password" id="login-pw" style="width:100%;" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()" style="width:100%;" id="login-btn">Anmelden</button>
+    <div id="login-err" style="color:var(--red);font-size:12px;margin-top:12px;display:none;"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <h1>DAITA-CRAFTER — SEITENÜBERSETZER</h1>
+    <div class="header-right">
+      <a href="/portal.html" style="color:#8fafc8;text-decoration:none;">Portal</a>
+      <a href="/cms.html" style="color:#8fafc8;text-decoration:none;">CMS</a>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">Abmelden</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-title">Seitenübersetzer</div>
+    <div class="page-sub">Übersetzt komplette HTML-Seiten mit Qwen3 — Ergebnis wird direkt als /[lang]/seite.html deployed</div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="field">
+        <div class="field-label">QUELLSPRACHE</div>
+        <select id="source-lang">
+          <option value="de">Deutsch (DE)</option>
+          <option value="en">English (EN)</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="field-label">ZIELSPRACHE</div>
+        <div id="lang-select-wrapper">
+          <div class="lang-loading"><div class="spinner"></div> Lade Sprachen vom Modell...</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">URL-PFAD-PREFIX</div>
+        <input type="text" id="lang-prefix" placeholder="/en" value="/en" readonly>
+      </div>
+      <div>
+        <button class="btn btn-green" id="translate-btn" onclick="startTranslation()" disabled>
+          Ausgewählte übersetzen
+        </button>
+      </div>
+    </div>
+
+    <!-- Vorhandene Sprachversionen -->
+    <div id="existing-langs-section" style="margin-bottom:32px;display:none;">
+      <div class="section-label">BEREITS VORHANDENE SPRACHVERSIONEN</div>
+      <div class="existing-langs" id="existing-langs"></div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section" id="progress-section">
+      <div class="progress-title" id="progress-title">Übersetze...</div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text">0 / 0</div>
+      <div class="progress-log" id="progress-log"></div>
+    </div>
+
+    <!-- File selection -->
+    <div class="action-bar">
+      <div class="section-label" style="margin-bottom:0;">SEITEN AUSWÄHLEN</div>
+      <button class="btn btn-outline btn-sm" onclick="selectAll()">Alle auswählen</button>
+      <button class="btn btn-outline btn-sm" onclick="selectNone()">Keine</button>
+      <span class="count" id="sel-count">0 ausgewählt</span>
+    </div>
+    <div class="file-grid" id="file-grid">
+      <div style="color:var(--text-4);font-size:13px;">Lade Seiten...</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://imuhzzxnkrmiwlccraff.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltdWh6enhua3JtaXdsY2NyYWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5MDE0ODEsImV4cCI6MjA4NzQ3NzQ4MX0.zsrIn4g53_5raGUmxTuIu68KX9AmsWOic70uXa8Hrqk';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// HTML pages served from the site — fetched from a manifest or hardcoded
+const PAGES = [
+  { name: 'Homepage', path: '/index.html' },
+  { name: 'SOS Server Landing', path: '/sos-server.html' },
+  { name: 'Data Platform Landing', path: '/data-platform.html' },
+  { name: 'Blog Index', path: '/blog/index.html' },
+  { name: 'Blog: SOS Server', path: '/blog/sos-server.html' },
+  { name: 'Login', path: '/login.html' },
+  { name: 'Registrierung', path: '/register.html' },
+  { name: 'Portal', path: '/portal.html' },
+];
+
+let selected = new Set();
+let fileStatuses = {}; // path -> {state: 'idle'|'busy'|'done'|'error', msg}
+let languages = [];
+let currentTargetLang = 'en';
+
+// ── Auth ──────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pw = document.getElementById('login-pw').value;
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Anmelden...';
+  const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) {
+    document.getElementById('login-err').textContent = error.message;
+    document.getElementById('login-err').style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Anmelden';
+  }
+}
+async function doLogout() { await sb.auth.signOut(); }
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
+
+// ── Init ──────────────────────────────────────────────────────
+async function init() {
+  renderFileGrid();
+  loadLanguages();
+  checkExistingTranslations();
+}
+
+async function loadLanguages() {
+  try {
+    const res = await fetch('/api/languages');
+    languages = await res.json();
+    renderLangSelect();
+  } catch (err) {
+    // fallback
+    languages = [
+      {code:'en',name:'English',native:'English'},
+      {code:'fr',name:'French',native:'Français'},
+      {code:'es',name:'Spanish',native:'Español'},
+      {code:'nl',name:'Dutch',native:'Nederlands'},
+      {code:'it',name:'Italian',native:'Italiano'},
+      {code:'pt',name:'Portuguese',native:'Português'},
+      {code:'pl',name:'Polish',native:'Polski'},
+      {code:'tr',name:'Turkish',native:'Türkçe'},
+      {code:'ru',name:'Russian',native:'Русский'},
+      {code:'ar',name:'Arabic',native:'العربية'},
+      {code:'zh',name:'Chinese',native:'中文'},
+      {code:'ja',name:'Japanese',native:'日本語'},
+    ];
+    renderLangSelect();
+  }
+}
+
+function renderLangSelect() {
+  const wrapper = document.getElementById('lang-select-wrapper');
+  wrapper.innerHTML = `<select id="target-lang" onchange="onLangChange(this.value)" style="width:100%;">
+    ${languages.filter(l => l.code !== 'de').map(l =>
+      `<option value="${l.code}">${l.native} (${l.code.toUpperCase()})</option>`
+    ).join('')}
+  </select>`;
+  document.getElementById('translate-btn').disabled = false;
+  onLangChange(languages.filter(l => l.code !== 'de')[0]?.code || 'en');
+}
+
+function onLangChange(code) {
+  currentTargetLang = code;
+  document.getElementById('lang-prefix').value = `/${code}`;
+}
+
+async function checkExistingTranslations() {
+  // Check what lang folders exist on the server
+  const section = document.getElementById('existing-langs-section');
+  const container = document.getElementById('existing-langs');
+  // Try to fetch /<lang>/index.html for common langs
+  const common = ['en','fr','es','nl','it','pt','pl','tr','ru','ar','zh','ja'];
+  const found = [];
+  await Promise.all(common.map(async lang => {
+    try {
+      const r = await fetch(`/${lang}/index.html`, { method: 'HEAD' });
+      if (r.ok) found.push(lang);
+    } catch {}
+  }));
+  if (found.length > 0) {
+    section.style.display = 'block';
+    container.innerHTML = found.map(l =>
+      `<div class="lang-badge" onclick="window.open('/${l}/index.html','_blank')">/${l}/</div>`
+    ).join('');
+  }
+}
+
+// ── File grid ─────────────────────────────────────────────────
+function renderFileGrid() {
+  const grid = document.getElementById('file-grid');
+  grid.innerHTML = PAGES.map(p => {
+    const s = fileStatuses[p.path];
+    let stateClass = selected.has(p.path) ? 'selected' : '';
+    let checkContent = selected.has(p.path) ? '✓' : '';
+    let statusHtml = '';
+    if (s?.state === 'done') {
+      stateClass = 'done'; checkContent = '✓';
+      statusHtml = `<div class="file-status ok">${s.msg}</div>`;
+    } else if (s?.state === 'error') {
+      stateClass = 'error-state'; checkContent = '✕';
+      statusHtml = `<div class="file-status err">${s.msg}</div>`;
+    } else if (s?.state === 'busy') {
+      stateClass = 'selected';
+      statusHtml = `<div class="file-status busy">Übersetze...</div>`;
+    }
+    return `
+      <div class="file-card ${stateClass}" onclick="toggleFile('${p.path}')" id="fc-${p.path.replace(/\//g,'-').replace(/\./g,'_')}">
+        <div class="file-check">${checkContent}</div>
+        <div class="file-info">
+          <div class="file-name">${p.name}</div>
+          <div class="file-path">${p.path}</div>
+          ${statusHtml}
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('sel-count').textContent = `${selected.size} ausgewählt`;
+}
+
+function toggleFile(path) {
+  if (fileStatuses[path]?.state === 'busy') return;
+  if (selected.has(path)) selected.delete(path);
+  else selected.add(path);
+  renderFileGrid();
+}
+
+function selectAll() { PAGES.forEach(p => selected.add(p.path)); renderFileGrid(); }
+function selectNone() { selected.clear(); renderFileGrid(); }
+
+// ── Translation ───────────────────────────────────────────────
+async function startTranslation() {
+  if (selected.size === 0) { toast('Keine Seiten ausgewählt', true); return; }
+  const targetLang = currentTargetLang;
+  const sourceLang = document.getElementById('source-lang').value;
+  const toProcess = [...selected];
+
+  document.getElementById('translate-btn').disabled = true;
+  const progSection = document.getElementById('progress-section');
+  progSection.classList.add('visible');
+  const log = document.getElementById('progress-log');
+  log.innerHTML = '';
+
+  let done = 0;
+  const total = toProcess.length;
+
+  function updateProgress(msg, isErr = false) {
+    document.getElementById('progress-bar').style.width = `${Math.round((done/total)*100)}%`;
+    document.getElementById('progress-text').textContent = `${done} / ${total}`;
+    document.getElementById('progress-title').textContent = `Übersetze nach ${targetLang.toUpperCase()} — ${done}/${total}`;
+    const line = document.createElement('div');
+    line.style.color = isErr ? 'var(--red)' : 'inherit';
+    line.textContent = msg;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  for (const path of toProcess) {
+    fileStatuses[path] = { state: 'busy' };
+    renderFileGrid();
+    updateProgress(`→ ${path}`);
+
+    try {
+      // Fetch source HTML
+      const srcRes = await fetch(path);
+      if (!srcRes.ok) throw new Error(`HTTP ${srcRes.status}`);
+      const html = await srcRes.text();
+
+      // Translate
+      const transRes = await fetch('/api/translate-page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html, sourceLang, targetLang })
+      });
+      if (!transRes.ok) {
+        const err = await transRes.json();
+        throw new Error(err.error || `HTTP ${transRes.status}`);
+      }
+      const { html: translatedHtml } = await transRes.json();
+
+      // Save via our deploy endpoint
+      const deployRes = await fetch('/api/deploy-translation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lang: targetLang, path, html: translatedHtml })
+      });
+      if (!deployRes.ok) {
+        const err = await deployRes.json();
+        throw new Error(err.error || 'Deploy fehlgeschlagen');
+      }
+
+      done++;
+      fileStatuses[path] = { state: 'done', msg: `→ /${targetLang}${path}` };
+      updateProgress(`✓ ${path} → /${targetLang}${path}`);
+    } catch (err) {
+      done++;
+      fileStatuses[path] = { state: 'error', msg: err.message };
+      updateProgress(`✕ ${path}: ${err.message}`, true);
+    }
+    renderFileGrid();
+    // Small pause between pages to not overwhelm Ollama
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  document.getElementById('translate-btn').disabled = false;
+  document.getElementById('progress-title').textContent = `Fertig — ${toProcess.length} Seiten übersetzt nach ${targetLang.toUpperCase()}`;
+  toast(`${toProcess.length} Seiten übersetzt nach ${targetLang.toUpperCase()}`);
+  checkExistingTranslations();
+}
+
+let toastTimer;
+function toast(msg, isError = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
+

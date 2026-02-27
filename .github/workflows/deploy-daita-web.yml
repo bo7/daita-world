@@ -1,0 +1,47 @@
+name: Deploy daita-web → b07
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/daita-web/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SSH Agent Setup
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.B07_SSH_KEY }}
+
+      - name: Add known host
+        run: |
+          mkdir -p ~/.ssh
+          # b07 ist nur via WireGuard erreichbar – Runner braucht WG-Zugang
+          # Alternativ: Jump via Hetzner
+          ssh-keyscan -p 2608 10.200.0.50 >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude='.env' \
+            --exclude='cv/*.pdf' \
+            --exclude='node_modules/' \
+            -e "ssh -p 2608" \
+            apps/daita-web/ \
+            b07@10.200.0.50:/opt/docker/daita-web/
+
+      - name: Restart containers
+        run: |
+          ssh -p 2608 b07@10.200.0.50 \
+            "cd /opt/docker/daita-web && docker compose up -d --build --remove-orphans"
+
+      - name: Health check
+        run: |
+          sleep 10
+          curl -sf https://hands.trembling-hands.com/health || exit 1
+          echo "Deploy erfolgreich"

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Der stille Server im Keller — DAITA-CRAFTER Blog</title>
+<meta name="description" content="Wie kleine Unternehmen mit einem refurbished Server im Keller und einem durchdachten System Enterprise-IT für unter 5.000 Euro bekommen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-600:#0078d4;--blue-700:#106ebe;--blue-50:#f0f6fd;--blue-100:#daeaf8;--blue-200:#b0d0f0;
+    --text-900:#0a1628;--text-700:#1e3a5f;--text-500:#4a6580;--text-300:#8fafc8;
+    --white:#ffffff;--surface:#f7fbff;--border:#d0e4f4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text-900);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:72px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;}
+  .logo{font-size:15px;font-weight:600;letter-spacing:0.06em;color:var(--text-900);text-transform:uppercase;text-decoration:none;}
+  .logo-dot{display:inline-block;width:6px;height:6px;background:var(--blue-600);border-radius:50%;margin:0 4px;vertical-align:middle;position:relative;top:-1px;}
+  nav ul{display:flex;gap:36px;list-style:none;}
+  nav ul a{font-size:14px;color:var(--text-500);text-decoration:none;transition:color 0.2s;}
+  nav ul a:hover{color:var(--blue-600);}
+  .nav-cta{padding:10px 24px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .nav-cta:hover{background:var(--blue-700);}
+
+  .post-wrap{max-width:800px;margin:0 auto;padding:64px 24px 96px;}
+  .post-back{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-300);text-decoration:none;margin-bottom:40px;transition:color 0.2s;}
+  .post-back:hover{color:var(--blue-600);}
+  .post-back svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+
+  .post-header{margin-bottom:48px;padding-bottom:48px;border-bottom:1px solid var(--border);}
+  .post-meta{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .post-tag{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-600);background:var(--blue-50);border:1px solid var(--blue-200);padding:3px 10px;}
+  .post-date,.post-read{font-size:13px;color:var(--text-300);}
+  .post-sep{color:var(--border);}
+  .post-title{font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,56px);font-weight:400;line-height:1.1;margin-bottom:20px;}
+  .post-intro{font-size:18px;color:var(--text-500);line-height:1.75;font-weight:300;}
+
+  .post-body{font-size:16px;line-height:1.8;color:var(--text-700);font-weight:300;}
+  .post-body p{margin-bottom:24px;}
+  .post-body h2{font-family:'Instrument Serif',serif;font-size:30px;font-weight:400;color:var(--text-900);margin:48px 0 20px;line-height:1.2;}
+  .post-body strong{font-weight:600;color:var(--text-900);}
+  .post-body blockquote{border-left:3px solid var(--blue-600);padding:4px 0 4px 24px;margin:32px 0;}
+  .post-body blockquote p{font-size:19px;font-style:italic;color:var(--text-500);margin:0;}
+
+  .callout{background:var(--blue-50);border:1px solid var(--blue-200);border-left:3px solid var(--blue-600);padding:20px 24px;margin:32px 0;}
+  .callout p{font-size:14px;color:var(--text-700);line-height:1.7;margin:0;}
+  .callout strong{color:var(--blue-600);}
+
+  .price-box{background:var(--surface);border:1px solid var(--border);padding:32px;margin:40px 0;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .price-item{display:flex;flex-direction:column;gap:6px;}
+  .price-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-300);}
+  .price-value{font-family:'Instrument Serif',serif;font-size:32px;font-weight:400;color:var(--blue-600);}
+  .price-note{font-size:13px;color:var(--text-500);font-weight:300;}
+
+  .post-footer{margin-top:64px;padding-top:48px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+  .author-box{display:flex;gap:20px;align-items:flex-start;}
+  .author-avatar{width:56px;height:56px;background:var(--blue-50);border:1px solid var(--blue-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .author-avatar svg{width:24px;height:24px;stroke:var(--blue-600);fill:none;}
+  .author-name{font-size:15px;font-weight:500;color:var(--text-900);margin-bottom:4px;}
+  .author-role{font-size:13px;color:var(--text-300);margin-bottom:8px;font-weight:300;}
+  .author-bio{font-size:13px;color:var(--text-500);line-height:1.6;font-weight:300;}
+  .post-cta-box{background:var(--surface);border:1px solid var(--border);padding:28px;}
+  .post-cta-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-300);margin-bottom:12px;}
+  .post-cta-text{font-size:14px;color:var(--text-700);line-height:1.6;margin-bottom:20px;font-weight:300;}
+  .btn-cta{display:inline-block;padding:11px 20px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:13px;font-weight:500;text-decoration:none;transition:background 0.2s;}
+  .btn-cta:hover{background:var(--blue-700);}
+
+  footer{border-top:1px solid var(--border);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;max-width:1440px;margin:0 auto;}
+  footer span{font-size:13px;color:var(--text-300);}
+  footer a{font-size:13px;color:var(--blue-600);text-decoration:none;}
+
+  @media(max-width:760px){
+    nav{padding:0 24px;} nav ul{display:none;}
+    .post-footer,.price-box{grid-template-columns:1fr;}
+    footer{padding:24px;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">DAITA<span class="logo-dot"></span>CRAFTER</a>
+  <ul>
+    <li><a href="/#leistungen">Leistungen</a></li>
+    <li><a href="/blog/index.html">Blog</a></li>
+    <li><a href="/data-platform.html">Data Platform</a></li>
+    <li><a href="/sos.html">Small Office</a></li>
+    <li><a href="/#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="/#kontakt" class="nav-cta">Kostenloses Gespräch</a>
+</nav>
+
+<div class="post-wrap">
+  <a href="/blog/index.html" class="post-back">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Zurück zum Blog
+  </a>
+
+  <div class="post-header">
+    <div class="post-meta">
+      <span class="post-tag">Small Office</span>
+      <span class="post-sep">·</span>
+      <span class="post-date">Februar 2026</span>
+      <span class="post-sep">·</span>
+      <span class="post-read">6 min Lesezeit</span>
+    </div>
+    <h1 class="post-title">Der stille Server im Keller — und warum Ihre Firma keine teure Cloud braucht</h1>
+    <p class="post-intro">Viele kleine Unternehmen zahlen jeden Monat für Cloud-Dienste, die sie eigentlich gar nicht brauchen. Es gibt eine Alternative — sie steht ruhig im Schrank, stört niemanden und liefert trotzdem Enterprise-IT.</p>
+  </div>
+
+  <div class="post-body">
+
+    <p>Stellen Sie sich vor: Ihre vier Mitarbeitenden kommen morgens ins Büro, öffnen ihre Geräte, und alles ist da. Dateien, Programme, Drucker, die gemeinsame Buchhaltungssoftware. Niemand wartet auf irgendeinen externen Server. Die Daten verlassen das Gebäude nicht. Und wenn jemand von unterwegs arbeitet, ist das genauso selbstverständlich wie im Büro.</p>
+
+    <p>Das klingt nach dem IT-Setup eines mittelgroßen Unternehmens mit eigenem IT-Leiter. Es ist aber das Ergebnis einer einmaligen Investition in eine Maschine, die leiser ist als ein alter Drucker — und die im Keller oder im Technikschrank steht.</p>
+
+    <figure style="margin:0 0 40px;border:1px solid var(--border);background:white;">
+      <img src="/blog/img/sos-netz-vergleich.svg" alt="Vorher Cloud-Chaos, nachher SOS Server" style="width:100%;display:block;">
+      <figcaption style="font-size:12px;color:var(--text-300);padding:10px 16px;border-top:1px solid var(--border);">Vorher: verstreute Cloud-Dienste, monatlich wachsende Kosten, Daten auf fremden Servern. Nachher: eine Maschine, alles zentral, Daten bei Ihnen.</figcaption>
+    </figure>
+
+        <h2>Das eigentliche Problem mit der Cloud</h2>
+
+    <p>Cloud-Dienste sind gut. Für die Unternehmen, die sie anbieten. Microsoft, Google und Dropbox verdienen ihr Geld damit, dass Sie monatlich zahlen — egal ob Sie die Kapazität wirklich brauchen oder nicht. Und mit jedem weiteren Nutzer, jedem weiteren Dienst wächst die Rechnung still weiter.</p>
+
+    <p>Für ein Büro mit vier bis zehn Mitarbeitenden sieht die Realität oft so aus: Microsoft 365 für alle, dazu irgendein Cloud-Speicher, ein externes Backup, vielleicht noch eine VPN-Lösung für Homeoffice. Das summiert sich schnell — und die Daten liegen dabei verteilt auf Servern, die Sie nie gesehen haben und nicht kontrollieren.</p>
+
+    <blockquote>
+      <p>Ihre Geschäftsdaten gehören Ihnen. Nicht auf den Server eines Konzerns, dessen Nutzungsbedingungen sich jährlich ändern.</p>
+    </blockquote>
+
+    <h2>Was ein Server im Keller wirklich kann</h2>
+
+    <p>Wir setzen für unsere SOS-Kunden professionell aufbereitete Server- und Workstation-Hardware ein — keine Neuware, sondern geprüfte Unternehmenshardware, die jahrelang in Rechenzentren gelaufen ist. Ihre Leistung liegt weit über dem, was ein kleines Büro je ausreizen wird.</p>
+
+    <p>Auf dieser Maschine läuft alles, was Ihr Büro braucht: gemeinsame Dateiablage, Windows-Umgebungen für Spezialsoftware, Druckerfreigaben, automatische Backups. Jeder Mitarbeitende greift darauf zu, als wäre es ein lokales Laufwerk — egal ob er im Büro sitzt, im Homeoffice ist oder beim Kunden.</p>
+
+    <p>Die Verbindung dazu läuft über ein verschlüsseltes privates Netzwerk, das wir für jeden Kunden individuell einrichten. Der Server ist von außen nicht erreichbar — für alle, die nichts damit zu tun haben, ist er schlicht unsichtbar. Nur Ihre Mitarbeitenden kommen rein, mit ihren Geräten, die wir dafür vorbereitet haben.</p>
+
+    <div class="callout">
+      <p><strong>Was auf dem Server läuft, bestimmen Sie.</strong> Windows-Desktops für Branchensoftware, gemeinsame Dateiserver, Buchhaltungsumgebungen, Druckerfreigaben, automatisierte Backups — oder alles davon. Die Hardware kann das. Wir richten es ein.</p>
+    </div>
+
+
+    <figure style="margin:40px 0;border:1px solid var(--border);background:white;">
+      <img src="/blog/img/sos-netz-gesamt.svg" alt="Netzwerkübersicht SOS Server" style="width:100%;display:block;">
+      <figcaption style="font-size:12px;color:var(--text-300);padding:10px 16px;border-top:1px solid var(--border);">Der Server steht bei Ihnen, ist von außen unsichtbar und verbindet alle Mitarbeitenden — im Büro, im Homeoffice, unterwegs.</figcaption>
+    </figure>
+
+    <h2>Günstigere Endgeräte als Bonus</h2>
+
+    <p>Wer seinen Server gut aufgestellt hat, braucht an jedem Arbeitsplatz keine teure Hardware mehr. Die eigentliche Rechenarbeit passiert auf dem Server — das Notebook oder Tablet des Mitarbeitenden ist nur noch das Fenster, durch das er arbeitet.</p>
+
+    <p>Das bedeutet in der Praxis: günstigere, leichtere, langlebigere Endgeräte, deutlich weniger Wartungsaufwand je Gerät, und wenn etwas kaputtgeht, ist in einer Stunde ein Ersatz eingerichtet. Die Daten sind alle auf dem Server — nichts geht verloren.</p>
+
+    <h2>Wartung, die nicht auffällt</h2>
+
+    <p>Das Wort "Server im Keller" weckt bei manchen Erinnerungen an die IT der 90er: ein surrendes Gerät, das regelmäßig ausfällt, und dann sitzt man da. Das ist heute anders — wenn man es richtig macht.</p>
+
+    <p>Unsere Systeme überwachen sich selbst. Wenn etwas Aufmerksamkeit braucht, wissen wir es — meistens bevor Sie es bemerken. Updates werden geplant und eingespielt, ohne dass jemand von Ihren Mitarbeitenden etwas davon mitbekommt. Das Backup läuft täglich, verschlüsselt, automatisch — in einen sicheren Cloudspeicher, den wir für Sie verwalten und den Sie im Zweifelsfall auch ohne uns abrufen könnten.</p>
+
+    <p>Die Automatisierung dahinter haben wir über viele Jahre in Enterprise-Projekten entwickelt. Für unsere SOS-Kunden läuft dieselbe Logik — nur in einer Dimension, die zu einem kleinen Büro passt.</p>
+
+    <figure style="margin:0 0 40px;border:1px solid var(--border);background:white;">
+      <img src="/blog/img/sos-netz-backup.svg" alt="Backup-Pipeline: lokal, verschlüsselt, Cloud" style="width:100%;display:block;">
+      <figcaption style="font-size:12px;color:var(--text-300);padding:10px 16px;border-top:1px solid var(--border);">Die Backup-Pipeline läuft täglich automatisch: Daten werden dedupliziert, komprimiert, verschlüsselt und extern gespeichert. Der Schlüssel gehört Ihnen.</figcaption>
+    </figure>
+
+        <h2>Was das kostet</h2>
+
+    <p>Einmalig investieren Sie in Hardware und Einrichtung. Danach zahlen Sie eine monatliche Pauschale für Wartung, Updates und Support — mit einer konkreten Reaktionszeitgarantie.</p>
+
+    <div class="price-box">
+      <div class="price-item">
+        <div class="price-label">Einrichtung &amp; Hardware</div>
+        <div class="price-value">4.999 €</div>
+        <div class="price-note">Pro Maschine, einmalig. Inkl. Installation, Einrichtung und Einweisung Ihres Teams.</div>
+      </div>
+      <div class="price-item">
+        <div class="price-label">Wartung &amp; Support</div>
+        <div class="price-value">199 €<span style="font-size:18px;color:var(--text-500)"> /Mo.</span></div>
+        <div class="price-note">Für 1–2 Maschinen. Ab 3 Maschinen 499 €/Monat. Reaktionszeit unter einer Stunde.</div>
+      </div>
+    </div>
+
+    <p>Zum Vergleich: Ein einziger Mitarbeitender, der regelmäßig mit IT-Problemen beschäftigt ist, kostet ein kleines Unternehmen — in Zeitverlust gerechnet — ein Vielfaches davon. Ganz zu schweigen davon, was passiert, wenn Daten verloren gehen oder ein Angriff das gesamte System lahmlegt.</p>
+
+    <h2>Für wen das gedacht ist — und für wen nicht</h2>
+
+    <p>Das SOS-System ist nicht für jeden. Wenn Sie keine festen Büroräume haben, ausschließlich im Browser arbeiten und Ihre fünf Mitarbeitenden in drei verschiedenen Ländern sitzen — dann ist das wahrscheinlich nicht Ihre Lösung.</p>
+
+    <p>Wenn Sie aber ein echtes Büro haben, Mitarbeitende die verlässliche, schnelle IT brauchen, vielleicht spezifische Software die nur lokal läuft, und monatliche Cloud-Kosten die langsam unangenehm werden — dann lohnt sich das Gespräch.</p>
+
+    <p>Wir hören zu. Ohne Verkaufsdruck. Und wenn wir denken, dass unser System für Ihre Situation keinen Sinn ergibt, sagen wir das auch.</p>
+
+  </div>
+
+  <div class="post-footer">
+    <div class="author-box">
+      <div class="author-avatar">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="author-name">Sven Bohnstedt</div>
+        <div class="author-role">Senior Data Engineer · DAITA-CRAFTER</div>
+        <div class="author-bio">Über 10 Jahre Enterprise-Infrastruktur — jetzt auch für kleine Büros. Weil gute IT keine Frage der Unternehmensgröße sein sollte.</div>
+      </div>
+    </div>
+    <div class="post-cta-box">
+      <div class="post-cta-label">Klingt interessant?</div>
+      <div class="post-cta-text">45 Minuten, kostenlos, auf Deutsch. Wir schauen gemeinsam, ob das SOS-System zu Ihrer Situation passt.</div>
+      <a href="/sos-server.html" class="btn-cta">Zur SOS-Seite</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 DAITA-CRAFTER · Sven Bohnstedt · Hamburg</span>
+  <a href="/blog/index.html">Mehr Artikel</a>
+</footer>
+</body>
+</html>
+

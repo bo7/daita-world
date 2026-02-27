@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrierung — DAITA-CRAFTER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue:#0078d4;--blue-dark:#005a9e;--green:#0e7a45;--red:#c0392b;--bg:#f7fbff;--surface:#fff;--border:#d0e4f4;--text:#0a1628;--text-2:#1e3a5f;--text-3:#4a6580;--text-4:#8fafc8; }
+    body { font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column; }
+    nav { background:var(--text-2);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between; }
+    nav a { color:#8fafc8;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.08em; }
+    nav a:hover { color:white; }
+    .brand { font-size:13px;font-weight:700;letter-spacing:0.12em;color:white; }
+    main { flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px; }
+    .card { background:var(--surface);border:1px solid var(--border);width:100%;max-width:480px;padding:48px; }
+    h1 { font-family:'Instrument Serif',serif;font-size:28px;color:var(--text-2);margin-bottom:6px; }
+    .sub { font-size:13px;color:var(--text-4);margin-bottom:36px;line-height:1.6; }
+    .field { margin-bottom:18px; }
+    label { display:block;font-size:11px;font-weight:600;letter-spacing:0.09em;color:var(--text-4);margin-bottom:6px; }
+    input { width:100%;border:1px solid var(--border);padding:11px 14px;font-family:inherit;font-size:14px;color:var(--text);background:var(--bg);outline:none; }
+    input:focus { border-color:var(--blue);background:var(--surface); }
+    .btn { width:100%;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;background:var(--blue);color:white;letter-spacing:0.04em;margin-top:8px; }
+    .btn:hover:not(:disabled) { background:var(--blue-dark); }
+    .btn:disabled { background:var(--border);color:var(--text-4);cursor:not-allowed; }
+    .msg { margin-top:20px;padding:16px;font-size:13px;line-height:1.6;display:none; }
+    .msg.success { background:#e8f8ef;color:var(--green);border:1px solid #a3d9b8; }
+    .msg.error { background:#fdf0ef;color:var(--red);border:1px solid #f0c0bc; }
+    .login-link { margin-top:24px;text-align:center;font-size:13px;color:var(--text-4); }
+    .login-link a { color:var(--blue);text-decoration:none;font-weight:600; }
+    .divider { border:none;border-top:1px solid var(--border);margin:24px 0; }
+    .consent { font-size:12px;color:var(--text-4);line-height:1.6;margin-top:16px; }
+  </style>
+</head>
+<body>
+<nav>
+  <span class="brand">DAITA-CRAFTER</span>
+  <a href="/login.html">Anmelden</a>
+</nav>
+<main>
+  <div class="card">
+    <h1>Zugang beantragen</h1>
+    <p class="sub">Erhalten Sie Zugriff auf den geschützten Bereich mit Lebenslauf-Download und weiteren Ressourcen. Nach Ihrer Registrierung erhalten Sie eine Bestätigungsmail.</p>
+
+    <div id="form-area">
+      <div class="field">
+        <label>NAME</label>
+        <input type="text" id="name" placeholder="Ihr Name" autocomplete="name">
+      </div>
+      <div class="field">
+        <label>UNTERNEHMEN <span style="color:var(--text-4);font-weight:400">(optional)</span></label>
+        <input type="text" id="company" placeholder="Firma GmbH" autocomplete="organization">
+      </div>
+      <div class="field">
+        <label>E-MAIL</label>
+        <input type="email" id="email" placeholder="name@firma.de" autocomplete="email">
+      </div>
+      <div class="field">
+        <label>PASSWORT</label>
+        <input type="password" id="password" placeholder="mind. 8 Zeichen" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label>PASSWORT WIEDERHOLEN</label>
+        <input type="password" id="password2" placeholder="Passwort bestätigen" autocomplete="new-password">
+      </div>
+      <button class="btn" id="reg-btn" onclick="doRegister()">Zugang beantragen</button>
+      <p class="consent">Mit der Registrierung bestätigen Sie, dass Sie die bereitgestellten Unterlagen nur für eigene Zwecke verwenden. Nach Bestätigung Ihrer E-Mail-Adresse erhalten Sie sofortigen Zugang.</p>
+    </div>
+
+    <div class="msg" id="msg"></div>
+
+    <hr class="divider">
+    <div class="login-link">Bereits registriert? <a href="/login.html">Anmelden</a></div>
+  </div>
+</main>
+
+<script>
+// Check for error params
+const params = new URLSearchParams(location.search);
+if (params.get('error') === 'token_expired') {
+  const msg = document.getElementById('msg');
+  msg.className = 'msg error';
+  msg.textContent = 'Der Bestätigungslink ist abgelaufen. Bitte registrieren Sie sich erneut.';
+  msg.style.display = 'block';
+}
+
+async function doRegister() {
+  const name = document.getElementById('name').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const password2 = document.getElementById('password2').value;
+  const btn = document.getElementById('reg-btn');
+  const msg = document.getElementById('msg');
+
+  if (!name || !email || !password) {
+    msg.className = 'msg error';
+    msg.textContent = 'Bitte füllen Sie alle Pflichtfelder aus.';
+    msg.style.display = 'block';
+    return;
+  }
+  if (password !== password2) {
+    msg.className = 'msg error';
+    msg.textContent = 'Die Passwörter stimmen nicht überein.';
+    msg.style.display = 'block';
+    return;
+  }
+  if (password.length < 8) {
+    msg.className = 'msg error';
+    msg.textContent = 'Das Passwort muss mindestens 8 Zeichen haben.';
+    msg.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Wird verarbeitet...';
+  msg.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, full_name: name, company })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Fehler bei der Registrierung');
+
+    document.getElementById('form-area').style.display = 'none';
+    msg.className = 'msg success';
+    msg.innerHTML = `<strong>Bestätigungsmail gesendet.</strong><br><br>Wir haben eine E-Mail an <strong>${email}</strong> geschickt. Bitte klicken Sie auf den Link in der Mail, um Ihren Zugang zu aktivieren.<br><br>Der Link ist 24 Stunden gültig.`;
+    msg.style.display = 'block';
+  } catch(err) {
+    msg.className = 'msg error';
+    msg.textContent = err.message;
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Zugang beantragen';
+  }
+}
+
+document.getElementById('password').addEventListener('keydown', e => { if(e.key==='Enter') doRegister(); });
+</script>
+</body>
+</html>
+

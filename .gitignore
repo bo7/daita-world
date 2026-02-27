@@ -1,0 +1,22 @@
+# Secrets & Envs
+.env
+.env.*
+!.env.example
+
+# CV PDFs (werden kopiert, nicht versioniert)
+apps/daita-web/cv/*.pdf
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Docker volumes & runtime
+volumes/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups
+*.backup.*

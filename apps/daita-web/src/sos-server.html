@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS Server — Enterprise-IT für kleine Büros · DAITA-CRAFTER</title>
+<meta name="description" content="Ein Server im Keller. Enterprise-Qualität. Faire Kosten. Professionelle IT für Büros bis 10 Personen — ab 4.999 € einmalig, 199 €/Monat Wartung.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-600:#0078d4;--blue-700:#106ebe;--blue-50:#f0f6fd;--blue-100:#daeaf8;--blue-200:#b0d0f0;
+    --text-900:#0a1628;--text-700:#1e3a5f;--text-500:#4a6580;--text-300:#8fafc8;
+    --white:#ffffff;--surface:#f7fbff;--border:#d0e4f4;
+    --green:#0e7a45;--green-light:#f0faf5;--green-border:#a3d9b8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text-900);}
+
+  /* NAV */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:72px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;}
+  .logo{font-size:15px;font-weight:600;letter-spacing:0.06em;color:var(--text-900);text-transform:uppercase;text-decoration:none;}
+  .logo-dot{display:inline-block;width:6px;height:6px;background:var(--blue-600);border-radius:50%;margin:0 4px;vertical-align:middle;position:relative;top:-1px;}
+  nav ul{display:flex;gap:36px;list-style:none;}
+  nav ul a{font-size:14px;color:var(--text-500);text-decoration:none;transition:color 0.2s;}
+  nav ul a:hover,nav ul a.active{color:var(--blue-600);}
+  .nav-cta{padding:10px 24px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .nav-cta:hover{background:var(--blue-700);}
+
+  /* HERO */
+  .hero{padding:96px 64px 80px;max-width:1440px;margin:0 auto;border-bottom:1px solid var(--border);}
+  .hero-inner{max-width:880px;}
+  .eyebrow-wrap{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+  .badge-green{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);background:var(--green-light);border:1px solid var(--green-border);padding:4px 12px;}
+  .badge-plain{font-size:12px;color:var(--text-300);border:1px solid var(--border);padding:4px 10px;}
+  h1{font-family:'Instrument Serif',serif;font-size:clamp(46px,5.5vw,80px);font-weight:400;line-height:1.05;margin-bottom:28px;}
+  h1 em{color:var(--blue-600);font-style:italic;}
+  .hero-desc{font-size:18px;color:var(--text-500);line-height:1.8;font-weight:300;max-width:620px;margin-bottom:48px;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:64px;}
+  .btn-primary{padding:15px 32px;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .btn-primary:hover{background:var(--blue-700);}
+  .btn-outline{padding:15px 32px;background:transparent;color:var(--blue-600);font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--blue-200);cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;}
+  .btn-outline:hover{background:var(--blue-50);}
+
+  /* STATS */
+  .stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .stat-cell{background:var(--white);padding:28px 24px;}
+  .stat-num{font-family:'Instrument Serif',serif;font-size:40px;line-height:1;color:var(--blue-600);margin-bottom:6px;}
+  .stat-label{font-size:13px;color:var(--text-500);font-weight:300;line-height:1.4;}
+
+  /* PROBLEM */
+  .problem-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .problem-inner{max-width:1440px;margin:0 auto;padding:56px 64px;display:grid;grid-template-columns:280px 1fr;gap:80px;align-items:start;}
+  .problem-lead{font-family:'Instrument Serif',serif;font-size:26px;color:var(--text-900);line-height:1.4;}
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .problem-item{display:flex;align-items:flex-start;gap:14px;}
+  .problem-dot{width:8px;height:8px;border-radius:50%;background:var(--blue-200);flex-shrink:0;margin-top:6px;}
+  .problem-body{font-size:14px;color:var(--text-500);line-height:1.65;font-weight:300;}
+  .problem-body strong{color:var(--text-900);font-weight:500;display:block;margin-bottom:3px;}
+
+  /* SECTIONS */
+  section{padding:80px 64px;max-width:1440px;margin:0 auto;}
+  .sec-label{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-300);margin-bottom:14px;}
+  h2{font-family:'Instrument Serif',serif;font-size:clamp(30px,3.5vw,46px);font-weight:400;line-height:1.2;margin-bottom:16px;}
+  .sec-desc{font-size:16px;color:var(--text-500);line-height:1.8;font-weight:300;max-width:580px;margin-bottom:48px;}
+
+  /* HOW */
+  .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .how-card{background:var(--white);padding:48px;transition:background 0.2s;}
+  .how-card:hover{background:var(--surface);}
+  .how-num{font-family:'Instrument Serif',serif;font-size:52px;color:var(--blue-100);line-height:1;margin-bottom:20px;}
+  .how-title{font-size:19px;font-weight:500;color:var(--text-900);margin-bottom:12px;}
+  .how-desc{font-size:15px;color:var(--text-500);line-height:1.75;font-weight:300;}
+
+  /* WHAT RUNS */
+  .runs-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+  .runs-text p{font-size:16px;color:var(--text-500);line-height:1.8;font-weight:300;margin-bottom:16px;}
+  .runs-text p:last-child{margin-bottom:0;}
+  .runs-list{display:flex;flex-direction:column;border:1px solid var(--border);}
+  .runs-item{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;background:var(--white);transition:background 0.2s;}
+  .runs-item:last-child{border-bottom:none;}
+  .runs-item:hover{background:var(--surface);}
+  .runs-icon{width:36px;height:36px;background:var(--blue-50);border:1px solid var(--blue-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .runs-icon svg{width:16px;height:16px;stroke:var(--blue-600);fill:none;}
+  .runs-name{font-size:14px;font-weight:500;color:var(--text-900);}
+  .runs-sub{font-size:12px;color:var(--text-300);font-weight:300;}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .price-card{background:var(--white);padding:48px;}
+  .price-card.featured{background:var(--text-900);}
+  .price-tier{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-300);margin-bottom:8px;}
+  .price-card.featured .price-tier{color:rgba(255,255,255,0.4);}
+  .price-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--text-900);margin-bottom:4px;}
+  .price-card.featured .price-title{color:var(--white);}
+  .price-amount{font-family:'Instrument Serif',serif;font-size:52px;color:var(--blue-600);line-height:1;margin:20px 0 4px;}
+  .price-card.featured .price-amount{color:#5ab3f0;}
+  .price-period{font-size:14px;color:var(--text-500);font-weight:300;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+  .price-card.featured .price-period{color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.1);}
+  .price-detail{font-size:14px;color:var(--text-500);line-height:1.75;font-weight:300;}
+  .price-card.featured .price-detail{color:rgba(255,255,255,0.55);}
+  .price-badge{display:inline-block;margin-top:20px;font-size:12px;font-weight:500;color:var(--blue-600);padding:8px 12px;background:var(--blue-50);border:1px solid var(--blue-200);}
+  .price-card.featured .price-badge{color:#5ab3f0;background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.12);}
+  .price-btn{display:block;margin-top:28px;padding:12px 20px;text-align:center;background:var(--blue-600);color:var(--white);font-family:inherit;font-size:13px;font-weight:500;text-decoration:none;transition:background 0.2s;}
+  .price-btn:hover{background:var(--blue-700);}
+  .price-card.featured .price-btn{background:var(--white);color:var(--text-900);}
+  .price-card.featured .price-btn:hover{opacity:0.9;}
+
+  /* TRUST */
+  .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+  .trust-card{background:var(--white);padding:36px;display:flex;gap:20px;align-items:flex-start;}
+  .trust-icon{width:40px;height:40px;background:var(--blue-50);border:1px solid var(--blue-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .trust-icon svg{width:18px;height:18px;stroke:var(--blue-600);fill:none;}
+  .trust-title{font-size:15px;font-weight:500;color:var(--text-900);margin-bottom:6px;}
+  .trust-text{font-size:13px;color:var(--text-500);line-height:1.65;font-weight:300;}
+
+  /* CTA BAND */
+  .cta-band{background:var(--text-900);padding:80px 64px;text-align:center;}
+  .cta-band h2{font-family:'Instrument Serif',serif;font-size:44px;color:var(--white);margin-bottom:16px;}
+  .cta-band p{font-size:16px;color:rgba(255,255,255,0.5);margin-bottom:40px;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto;}
+  .btn-white{padding:15px 36px;background:var(--white);color:var(--text-900);font-family:inherit;font-size:14px;font-weight:600;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity 0.2s;}
+  .btn-white:hover{opacity:0.9;}
+  .cta-sub{font-size:13px;color:rgba(255,255,255,0.3);margin-top:20px;}
+  .cta-sub a{color:rgba(255,255,255,0.45);text-decoration:underline;}
+
+  footer{border-top:1px solid var(--border);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;max-width:1440px;margin:0 auto;}
+  footer span{font-size:13px;color:var(--text-300);}
+  footer a{font-size:13px;color:var(--blue-600);text-decoration:none;}
+
+  @media(max-width:960px){
+    nav{padding:0 24px;} nav ul{display:none;}
+    .hero{padding:48px 24px;} section{padding:48px 24px;}
+    .problem-inner{grid-template-columns:1fr;gap:32px;}
+    .problem-grid,.how-grid,.runs-wrap,.pricing-grid,.trust-grid{grid-template-columns:1fr;}
+    .stat-bar{grid-template-columns:repeat(2,1fr);}
+    .cta-band{padding:48px 24px;} footer{padding:24px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">DAITA<span class="logo-dot"></span>CRAFTER</a>
+  <ul>
+    <li><a href="/#leistungen">Leistungen</a></li>
+    <li><a href="/blog/index.html">Blog</a></li>
+    <li><a href="/data-platform.html">Data Platform</a></li>
+    <li><a href="/sos.html" class="active">Small Office</a></li>
+    <li><a href="/#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="/#kontakt" class="nav-cta">Anfragen</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow-wrap">
+      <span class="badge-green">SOS Server</span>
+      <span class="badge-plain">Für Büros bis 10 Personen</span>
+    </div>
+    <h1>Enterprise-IT.<br>Eine Maschine.<br><em>Ihr Keller.</em></h1>
+    <p class="hero-desc">Ihre Mitarbeitenden brauchen verlässliche IT ohne Ausfälle, ohne Datenverlust, ohne Abhängigkeit von Cloud-Diensten, deren Preise und Bedingungen sich jährlich ändern. Wir liefern das — mit einer einzigen, professionell eingerichteten Maschine, die still im Hintergrund läuft und sich selbst pflegt.</p>
+    <div class="hero-actions">
+      <a href="/#kontakt" class="btn-primary">Kostenloses Erstgespräch</a>
+      <a href="/blog/sos-server.html" class="btn-outline">Wie das funktioniert</a>
+    </div>
+    <div class="stat-bar">
+      <div class="stat-cell">
+        <div class="stat-num">4.999</div>
+        <div class="stat-label">Euro einmalig<br>Einrichtung &amp; Hardware</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">199</div>
+        <div class="stat-label">Euro / Monat<br>Wartung ab 1 Maschine</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">&lt;1h</div>
+        <div class="stat-label">Reaktionszeit<br>bei Störungen, zugesagt</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Jahre Enterprise-<br>Infrastruktur-Erfahrung</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM STRIP -->
+<div class="problem-strip">
+  <div class="problem-inner">
+    <div class="problem-lead">Kommt Ihnen das bekannt vor?</div>
+    <div class="problem-grid">
+      <div class="problem-item">
+        <div class="problem-dot"></div>
+        <div class="problem-body"><strong>Monatliche Cloud-Kosten wachsen still</strong>Microsoft 365, Cloud-Speicher, irgendein Backup — pro Mitarbeitenden summiert sich das schnell auf 60–120 Euro. Monatlich.</div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-dot"></div>
+        <div class="problem-body"><strong>Homeoffice ist umständlich</strong>VPN funktioniert manchmal. Gemeinsame Dateien existieren mehrfach. Niemand weiß, welche Version aktuell ist.</div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-dot"></div>
+        <div class="problem-body"><strong>Kein verlässlicher Ansprechpartner</strong>Der Neffe der Geschäftsführerin, der sich "mit Computern auskennt", ist keine IT-Strategie.</div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-dot"></div>
+        <div class="problem-body"><strong>Datenschutz bleibt unklar</strong>Wo liegen eigentlich die Kundendaten? Auf welchem Server, in welchem Land, unter welchen Nutzungsbedingungen?</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="sec-label">So funktioniert es</div>
+  <h2>Eine Maschine. Alles drin.</h2>
+  <p class="sec-desc">Wir richten einen professionell aufbereiteten Server bei Ihnen vor Ort ein. Von außen unsichtbar. Von innen läuft alles darüber.</p>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <div class="how-title">Hardware vor Ort</div>
+      <div class="how-desc">Eine professionell geprüfte und aufbereitete Unternehmenshardware kommt in Ihren Keller, Technikraum oder Schrank. Leise. Zuverlässig. Wir richten alles ein — Sie müssen nichts wissen außer wo der Stecker ist.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <div class="how-title">Sicher verbunden — überall</div>
+      <div class="how-desc">Über ein verschlüsseltes, privates Netzwerk greifen Ihre Mitarbeitenden auf alles zu: im Büro, im Homeoffice, beim Kunden. Der Server ist von außen schlicht nicht erreichbar. Nur Ihre Geräte kommen rein.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <div class="how-title">Läuft, was Sie brauchen</div>
+      <div class="how-desc">Windows-Desktops für Spezialsoftware, gemeinsame Dateiablage, Druckerfreigaben, Buchhaltungsumgebungen — was auch immer Ihr Büro täglich braucht. Ihre Mitarbeitenden merken keinen Unterschied zum alten Setup — außer dass alles schneller geht.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">04</div>
+      <div class="how-title">Wartung, die nicht stört</div>
+      <div class="how-desc">Das System überwacht sich selbst. Updates laufen nachts. Backups laufen täglich, automatisch und verschlüsselt. Wenn etwas Aufmerksamkeit braucht, wissen wir es — meistens bevor Sie es bemerken. Reaktionszeit unter einer Stunde.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT RUNS -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="runs-wrap">
+    <div class="runs-text">
+      <div class="sec-label">Was drauf läuft</div>
+      <h2>Alles, was Ihr Büro braucht</h2>
+      <p>Die Maschine läuft mehrere voneinander getrennte Umgebungen gleichzeitig — Windows für Branchensoftware, Fileserver für gemeinsame Daten, automatisiertes Backup, Netzwerkdienste. Alles auf einer Hardware, alles zentral verwaltet.</p>
+      <p>Endgeräte Ihrer Mitarbeitenden werden dadurch günstiger und einfacher: Die schwere Rechenarbeit passiert auf dem Server. Ein leichtes Notebook oder ein kompaktes Gerät reicht vollkommen — und wenn es kaputtgeht, ist in einer Stunde ein Ersatz eingerichtet.</p>
+      <p>Wie genau wir das technisch aufbauen, behalten wir für uns. Das ist unsere Methode — entwickelt über Jahre in Enterprise-Projekten. Was Sie wissen müssen: Es funktioniert, es ist sicher, und wir stehen dafür gerade.</p>
+    </div>
+    <div class="runs-list">
+      <div class="runs-item">
+        <div class="runs-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div><div class="runs-name">Windows-Desktops</div><div class="runs-sub">Branchensoftware, Office, spezifische Anwendungen</div></div>
+      </div>
+      <div class="runs-item">
+        <div class="runs-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+        <div><div class="runs-name">Gemeinsame Dateiablage</div><div class="runs-sub">Freigaben, Zugriffsrechte, zentrale Ablage</div></div>
+      </div>
+      <div class="runs-item">
+        <div class="runs-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg></div>
+        <div><div class="runs-name">Verschlüsseltes Cloud-Backup</div><div class="runs-sub">Automatisch, täglich, extern geprüft</div></div>
+      </div>
+      <div class="runs-item">
+        <div class="runs-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="runs-name">Sicheres Netzwerk</div><div class="runs-sub">Verschlüsselter Fernzugriff für alle Mitarbeitenden</div></div>
+      </div>
+      <div class="runs-item">
+        <div class="runs-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+        <div><div class="runs-name">Drucker &amp; Gerätefreigaben</div><div class="runs-sub">Zentral verwaltet, überall im Netz erreichbar</div></div>
+      </div>
+      <div class="runs-item">
+        <div class="runs-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><div class="runs-name">Monitoring &amp; Selbstdiagnose</div><div class="runs-sub">Proaktive Erkennung, bevor etwas ausfällt</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="sec-label">Preise</div>
+  <h2>Klar und fair</h2>
+  <p class="sec-desc">Einmalig investieren, monatlich gepflegt. Keine bösen Überraschungen, keine versteckten Posten.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Einmalig</div>
+      <div class="price-title">Hardware &amp; Einrichtung</div>
+      <div class="price-amount">4.999</div>
+      <div class="price-period">Euro · pro Maschine</div>
+      <div class="price-detail">Professionell aufbereitete Unternehmenshardware, vollständige Einrichtung aller Dienste, Netzwerkintegration und Einweisung Ihres Teams. Alles aus einer Hand, einmal bezahlt.</div>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">Monatlich · 1–2 Maschinen</div>
+      <div class="price-title">Wartung &amp; Support</div>
+      <div class="price-amount">199</div>
+      <div class="price-period">Euro · pro Monat</div>
+      <div class="price-detail">Updates, Monitoring, Backup-Kontrolle, Störungsbeseitigung. Sie haben einen Ansprechpartner — und der meldet sich schnell.</div>
+      <div class="price-badge">Reaktionszeit unter 1 Stunde — zugesagt</div>
+      <a href="/#kontakt" class="price-btn">Anfragen</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Monatlich · 3–5 Maschinen</div>
+      <div class="price-title">Wartung erweitert</div>
+      <div class="price-amount">499</div>
+      <div class="price-period">Euro · pro Monat</div>
+      <div class="price-detail">Vollständige Betreuung mehrerer Maschinen oder Standorte. Priorisierter Support, Quartalsgespräch, gemeinsame Planung der nächsten Schritte.</div>
+      <div class="price-badge">Inkl. Quartalsgespräch &amp; Roadmap</div>
+      <a href="/#kontakt" class="price-btn">Anfragen</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="sec-label">Warum DAITA-CRAFTER</div>
+  <h2>Enterprise-Erfahrung. Kleine-Büro-Maßstab.</h2>
+  <p class="sec-desc">Wir bringen dasselbe Methodenwissen mit, mit dem wir Infrastruktur für große Unternehmen betreiben — skaliert auf eine Größe, die für Ihr Büro Sinn ergibt.</p>
+  <div class="trust-grid">
+    <div class="trust-card">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div>
+        <div class="trust-title">Daten bleiben bei Ihnen</div>
+        <div class="trust-text">Der Server steht in Ihrem Haus. Kundendaten, Buchhaltung, Verträge — alles auf Hardware, die Sie kontrollieren. Kein Konzern ändert einseitig die Nutzungsbedingungen.</div>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div>
+        <div class="trust-title">Automatisierung aus echten Projekten</div>
+        <div class="trust-text">Die Wartungsroutinen und Backup-Pipelines, die wir einsetzen, haben wir über viele Jahre in Enterprise-Umgebungen entwickelt und erprobt. Keine Bastelei — bewährte Prozesse.</div>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div>
+        <div class="trust-title">Reaktionszeit unter einer Stunde</div>
+        <div class="trust-text">Kein "wir melden uns" — sondern ein Versprechen, das wir einhalten. Weil wir wissen, was ein Ausfall für ein kleines Büro bedeutet: verlorene Stunden, verlorenes Vertrauen.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>Klingt das nach Ihrer Situation?</h2>
+  <p>Wir reden kurz miteinander. 45 Minuten, kostenlos, ohne Fachchinesisch. Wenn es nicht passt, sagen wir das auch.</p>
+  <a href="/#kontakt" class="btn-white">Gespräch anfragen</a>
+  <div class="cta-sub">Erst lesen? <a href="/blog/sos-server.html">Der stille Server im Keller — unser Blogartikel dazu.</a></div>
+</div>
+
+<footer>
+  <span>© 2026 DAITA-CRAFTER · Sven Bohnstedt · Hamburg</span>
+  <a href="/blog/index.html">Blog</a>
+</footer>
+</body>
+</html>
+
