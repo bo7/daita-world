@@ -9,7 +9,7 @@ services:
     ports:
       - "127.0.0.1:8230:8000"
     environment:
-      - BASE_URL=${SITE_URL}
+      - BASE_URL=https://daita-crafter.com
       - SECRET_KEY_BASE=${PLAUSIBLE_SECRET_KEY_BASE}
       - DATABASE_URL=postgres://plausible:${PLAUSIBLE_DB_PASSWORD}@plausible_db:5432/plausible
       - DISABLE_REGISTRATION=true
@@ -42,10 +42,10 @@ services:
     ports:
       - "127.0.0.1:8231:80"
     volumes:
-      - ./src:/usr/share/nginx/html:ro
+      - ./astro-dist:/usr/share/nginx/html:ro
       - ./nginx/conf.d/web.conf:/etc/nginx/conf.d/default.conf:ro
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/health || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -56,15 +56,17 @@ services:
     ports:
       - "127.0.0.1:3100:3100"
     environment:
-      - OLLAMA_HOST=${OLLAMA_HOST}
-      - OLLAMA_MODEL=${OLLAMA_MODEL}
+      - OLLAMA_HOST=http://10.200.0.11:11434
+      - OLLAMA_MODEL=qwen3:235b
       - SITE_ROOT=/site
-      - SITE_URL=${SITE_URL}
-      - SB_URL=${SB_URL}
+      - SITE_URL=https://hands.trembling-hands.com
+      - SB_URL=https://imuhzzxnkrmiwlccraff.supabase.co
       - SB_SECRET=${SB_SECRET}
-      - RESEND_KEY=${RESEND_KEY}
+      - TWENTY_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZTY2MjQyOS1iZWRkLTRhZmEtYjg2NC04ZTUyMThlMDJmMDMiLCJ0eXBlIjoiQVBJX0tFWSIsIndvcmtzcGFjZUlkIjoiMGU2NjI0MjktYmVkZC00YWZhLWI4NjQtOGU1MjE4ZTAyZjAzIiwiaWF0IjoxNzcyMzYxNTQzLCJleHAiOjQ5MjU5NjE1NDIsImp0aSI6IjMzMTZhY2Q5LTA0NDMtNDhkMi04MWM0LTA0NzYyMzVmZDg2MCJ9.rJjhVZc-NNoknQXipoeljimK52khdM0E_iUIW1NB3uA
+      - MLX_HOST=http://10.200.0.12:8082
+      - RESEND_KEY=re_XiZhd9Ct_A86zNzeX4aRPFcwZF79TjWRC
     volumes:
-      - ./src:/site
+      - ./astro-dist:/site
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3100/health"]
       interval: 30s
