@@ -41,28 +41,27 @@
     .btn-green:disabled { background:var(--border);color:var(--text-4);cursor:not-allowed; }
     .btn-sm { padding:7px 14px;font-size:12px; }
 
-    /* CV Translator */
-    .translator-box { background:var(--surface);border:1px solid var(--border);padding:32px;margin-bottom:48px; }
-    .translator-box h2 { font-size:18px;font-weight:700;color:var(--text-2);margin-bottom:6px; }
-    .translator-box p { font-size:13px;color:var(--text-4);margin-bottom:28px;line-height:1.6; }
-    .trans-controls { display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px; }
-    .trans-field { display:flex;flex-direction:column;gap:6px;flex:1;min-width:200px; }
-    .field-label { font-size:11px;font-weight:600;letter-spacing:0.09em;color:var(--text-4); }
-    select { border:1px solid var(--border);padding:10px 12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--bg);outline:none;width:100%; }
-    select:focus { border-color:var(--blue);background:var(--surface); }
-    .trans-log { background:var(--bg);border:1px solid var(--border);padding:16px;font-size:12px;font-family:monospace;line-height:1.8;color:var(--text-3);min-height:60px;display:none; }
-    .trans-log.visible { display:block; }
-    .progress-bar { height:4px;background:var(--border);margin:12px 0; }
-    .progress-fill { height:100%;background:var(--green);transition:width 0.3s;width:0%; }
-
-    .spinner { display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-
     .coming-soon { display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.08em;background:#f0f6fd;color:var(--blue);padding:3px 8px;vertical-align:middle;margin-left:8px; }
 
     .gate-box { background:var(--surface);border:1px solid var(--border);padding:48px;max-width:440px;width:100%;text-align:center; }
     .gate-box h2 { font-size:20px;font-weight:700;color:var(--text-2);margin-bottom:8px; }
     .gate-box p { font-size:13px;color:var(--text-4);margin-bottom:28px; }
+
+    select { border:1px solid var(--border);padding:10px 12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--bg);outline:none;width:100%; }
+    select:focus { border-color:var(--blue);background:var(--surface); }
+    .field-label { font-size:11px;font-weight:600;letter-spacing:0.09em;color:var(--text-4);margin-bottom:6px;display:block; }
+
+    .progress-bar { height:4px;background:var(--border);margin:12px 0; }
+    .progress-fill { height:100%;background:var(--green);transition:width 0.3s;width:0%; }
+    .spinner { display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* Password change section */
+    .pw-card { background:var(--surface);border:1px solid var(--border);padding:32px;margin-bottom:48px; }
+    .pw-card h2 { font-size:18px;font-weight:700;color:var(--text-2);margin-bottom:20px; }
+    .pw-field { margin-bottom:14px; }
+    .pw-field input { width:100%;border:1px solid var(--border);padding:10px 12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--bg);outline:none; }
+    .pw-field input:focus { border-color:var(--blue);background:var(--surface); }
   </style>
 </head>
 <body>
@@ -82,8 +81,6 @@
     <span class="brand">DAITA-CRAFTER</span>
     <div class="nav-right">
       <span id="nav-name"></span>
-      <a href="/translate.html">Übersetzer</a>
-      <a href="/cms.html">CMS</a>
       <a href="#" onclick="doLogout()">Abmelden</a>
     </div>
   </nav>
@@ -92,54 +89,68 @@
     <div class="greeting" id="greeting">Willkommen</div>
     <div class="greeting-sub">Ihr persönlicher Bereich bei DAITA-CRAFTER</div>
 
-    <!-- CV Downloads -->
-    <div class="section-label">LEBENSLAUF — DIREKTER DOWNLOAD</div>
-    <div class="cards" style="margin-bottom:32px;">
+    <!-- CV Downloads — 3 Cards -->
+    <div class="section-label">LEBENSLAUF</div>
+    <div class="cards" style="margin-bottom:48px;">
+
+      <!-- Card 1: Deutsch -->
       <div class="card">
         <div class="card-icon">📄</div>
         <div class="card-title">Lebenslauf Deutsch</div>
         <div class="card-desc">Vollständiger Lebenslauf von Sven Bohnstedt als PDF — Deutsche Version.</div>
         <a href="/cv/sven-bohnstedt-cv-de.pdf" download class="btn btn-primary">DE herunterladen</a>
       </div>
+
+      <!-- Card 2: English -->
       <div class="card">
         <div class="card-icon">📄</div>
         <div class="card-title">Curriculum Vitae English</div>
         <div class="card-desc">Complete curriculum vitae of Sven Bohnstedt as PDF — English version.</div>
         <a href="/cv/sven-bohnstedt-cv-en.pdf" download class="btn btn-primary">Download EN</a>
       </div>
+
+      <!-- Card 3: KI-generiert -->
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">KI-generiert</div>
+        <div class="card-desc">Lebenslauf in einer anderen Sprache — KI-übersetzt auf Anfrage.</div>
+        <div style="margin-bottom:14px;">
+          <label class="field-label" for="cv-target">ZIELSPRACHE</label>
+          <select id="cv-target" onchange="onLangChange()">
+            <option value="">Wird geladen...</option>
+          </select>
+        </div>
+        <button class="btn btn-green" id="trans-btn" onclick="translateCV()" disabled style="width:100%">
+          Sprache laden / generieren
+        </button>
+        <div class="progress-bar" id="trans-progress" style="display:none;margin-top:12px;">
+          <div class="progress-fill" id="trans-fill"></div>
+        </div>
+        <div id="trans-status" style="font-size:12px;color:var(--text-4);margin-top:8px;display:none;">
+          Wird erzeugt durch KI — bitte warten...
+        </div>
+        <div id="trans-result" style="margin-top:12px;"></div>
+      </div>
     </div>
 
-    <!-- CV Translator -->
-    <div class="translator-box">
-      <h2>CV in beliebige Sprache übersetzen</h2>
-      <p>Qwen3 übersetzt den Lebenslauf on-the-fly in Ihre gewünschte Sprache und stellt ihn als Download bereit. Der Vorgang dauert je nach Sprache 1–3 Minuten.</p>
-
-      <div class="trans-controls">
-        <div class="trans-field">
-          <div class="field-label">QUELL-CV</div>
-          <select id="cv-source">
-            <option value="de">Lebenslauf DE</option>
-            <option value="en">CV EN</option>
-          </select>
-        </div>
-        <div class="trans-field">
-          <div class="field-label">ZIELSPRACHE</div>
-          <select id="cv-target">
-            <option value="">Lade Sprachen...</option>
-          </select>
-        </div>
-        <div>
-          <button class="btn btn-green" id="trans-btn" onclick="translateCV()" disabled>
-            CV übersetzen
-          </button>
-        </div>
+    <!-- Password Change -->
+    <div class="section-label">SICHERHEIT</div>
+    <div class="pw-card">
+      <h2>Passwort ändern</h2>
+      <div class="pw-field">
+        <label class="field-label">AKTUELLES PASSWORT</label>
+        <input type="password" id="pw-current" placeholder="Aktuelles Passwort" autocomplete="current-password">
       </div>
-
-      <div class="progress-bar" id="trans-progress" style="display:none;">
-        <div class="progress-fill" id="trans-fill"></div>
+      <div class="pw-field">
+        <label class="field-label">NEUES PASSWORT</label>
+        <input type="password" id="pw-new" placeholder="Neues Passwort (mind. 8 Zeichen)" autocomplete="new-password">
       </div>
-      <div class="trans-log" id="trans-log"></div>
-      <div id="trans-result" style="margin-top:16px;"></div>
+      <div class="pw-field" style="margin-bottom:20px;">
+        <label class="field-label">NEUES PASSWORT WIEDERHOLEN</label>
+        <input type="password" id="pw-new2" placeholder="Neues Passwort bestätigen" autocomplete="new-password">
+      </div>
+      <button class="btn btn-primary" onclick="changePassword()">Passwort ändern</button>
+      <div id="pw-msg" style="margin-top:14px;font-size:13px;display:none;padding:12px;"></div>
     </div>
 
     <!-- Coming Soon -->
@@ -172,6 +183,19 @@ const SUPABASE_URL = 'https://imuhzzxnkrmiwlccraff.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltdWh6enhua3JtaXdsY2NyYWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5MDE0ODEsImV4cCI6MjA4NzQ3NzQ4MX0.zsrIn4g53_5raGUmxTuIu68KX9AmsWOic70uXa8Hrqk';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+const LANGUAGES = [
+  {code:'fr',name:'Français'},{code:'es',name:'Español'},{code:'it',name:'Italiano'},
+  {code:'pt',name:'Português'},{code:'nl',name:'Nederlands'},{code:'pl',name:'Polski'},
+  {code:'cs',name:'Čeština'},{code:'sk',name:'Slovenčina'},{code:'hu',name:'Magyar'},
+  {code:'ro',name:'Română'},{code:'hr',name:'Hrvatski'},{code:'sv',name:'Svenska'},
+  {code:'da',name:'Dansk'},{code:'no',name:'Norsk'},{code:'fi',name:'Suomi'},
+  {code:'tr',name:'Türkçe'},{code:'ar',name:'العربية'},{code:'zh',name:'中文'},
+  {code:'ja',name:'日本語'},{code:'ko',name:'한국어'},{code:'ru',name:'Русский'},
+  {code:'uk',name:'Українська'}
+];
+
+let availableLangs = [];
+
 sb.auth.onAuthStateChange(async (event, session) => {
   if (session) {
     document.getElementById('gate').style.display = 'none';
@@ -179,7 +203,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
     const name = session.user.user_metadata?.full_name || session.user.email;
     document.getElementById('greeting').textContent = `Willkommen, ${name.split(' ')[0]}`;
     document.getElementById('nav-name').textContent = name;
-    loadLanguages();
+    loadCVList();
   } else {
     document.getElementById('gate').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
@@ -191,111 +215,392 @@ async function doLogout() {
   location.href = '/login.html';
 }
 
-async function loadLanguages() {
+async function loadCVList() {
   const sel = document.getElementById('cv-target');
   try {
-    const res = await fetch('/api/languages');
-    const langs = await res.json();
-    sel.innerHTML = langs
-      .filter(l => !['de','en'].includes(l.code))
-      .map(l => `<option value="${l.code}">${l.native} (${l.code.toUpperCase()})</option>`)
-      .join('');
-    document.getElementById('trans-btn').disabled = false;
+    const res = await fetch('/api/cv/list');
+    const data = await res.json();
+    availableLangs = data.available || [];
   } catch {
-    sel.innerHTML = '<option value="fr">Français (FR)</option><option value="es">Español (ES)</option><option value="nl">Nederlands (NL)</option>';
-    document.getElementById('trans-btn').disabled = false;
+    availableLangs = ['de', 'en'];
+  }
+  sel.innerHTML = LANGUAGES.map(l => {
+    const has = availableLangs.includes(l.code);
+    return `<option value="${l.code}">${has ? '✓ ' : ''}${l.name} (${l.code.toUpperCase()})</option>`;
+  }).join('');
+  document.getElementById('trans-btn').disabled = false;
+  onLangChange();
+}
+
+function onLangChange() {
+  const lang = document.getElementById('cv-target').value;
+  const result = document.getElementById('trans-result');
+  if (availableLangs.includes(lang)) {
+    result.innerHTML = `<a href="/cv/sven-bohnstedt-cv-${lang}.pdf" download class="btn btn-green btn-sm">PDF herunterladen</a>`;
+  } else {
+    result.innerHTML = '';
   }
 }
 
 async function translateCV() {
-  const sourceLang = document.getElementById('cv-source').value;
   const targetLang = document.getElementById('cv-target').value;
   if (!targetLang) return;
 
+  // If already available, just trigger download
+  if (availableLangs.includes(targetLang)) {
+    window.location.href = `/cv/sven-bohnstedt-cv-${targetLang}.pdf`;
+    return;
+  }
+
   const btn = document.getElementById('trans-btn');
-  const log = document.getElementById('trans-log');
   const result = document.getElementById('trans-result');
   const progress = document.getElementById('trans-progress');
   const fill = document.getElementById('trans-fill');
+  const status = document.getElementById('trans-status');
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Übersetze...';
-  log.className = 'trans-log visible';
-  log.textContent = '';
-  result.innerHTML = '';
   progress.style.display = 'block';
+  fill.style.background = 'var(--green)';
   fill.style.width = '5%';
+  status.style.display = 'block';
+  result.innerHTML = '';
 
-  function addLog(msg) {
-    log.textContent += msg + '\n';
-    log.scrollTop = log.scrollHeight;
+  let progressInterval = null;
+  function startProgress(from, to, durationMs) {
+    const step = (to - from) / (durationMs / 200);
+    let cur = from;
+    progressInterval = setInterval(() => {
+      cur = Math.min(cur + step, to);
+      fill.style.width = cur + '%';
+    }, 200);
   }
 
   try {
-    const cvPath = `/cv/sven-bohnstedt-cv-${sourceLang}.pdf`;
-    addLog(`Lade CV (${sourceLang.toUpperCase()})...`);
-    fill.style.width = '15%';
-
-    // Fetch PDF as base64
-    const pdfRes = await fetch(cvPath);
-    if (!pdfRes.ok) throw new Error(`CV nicht gefunden: ${cvPath}`);
-    const pdfBlob = await pdfRes.blob();
-
-    // Extract text from PDF using pdfjs via our existing infrastructure
-    // We send the PDF to the bridge which extracts text, translates, returns text
-    addLog(`PDF geladen (${Math.round(pdfBlob.size/1024)} KB). Extrahiere Text...`);
-    fill.style.width = '30%';
-
-    // Convert to base64
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(pdfBlob);
-    });
-
-    addLog(`Sende an Qwen3 zur Übersetzung nach ${targetLang.toUpperCase()}...`);
-    fill.style.width = '45%';
+    fill.style.width = '10%';
+    startProgress(10, 88, 120000);
 
     const res = await fetch('/api/translate-cv', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pdfBase64: base64, sourceLang, targetLang })
+      body: JSON.stringify({ targetLang })
     });
 
-    fill.style.width = '85%';
+    if (progressInterval) clearInterval(progressInterval);
 
     if (!res.ok) {
-      const err = await res.json();
+      const ct = res.headers.get('content-type') || '';
+      const err = ct.includes('json') ? await res.json() : { error: await res.text() };
       throw new Error(err.error || 'Übersetzungsfehler');
     }
 
-    const data = await res.json();
+    const pdfBytes = await res.arrayBuffer();
     fill.style.width = '100%';
-    addLog(`Übersetzung abgeschlossen (${data.model}).`);
+    status.style.display = 'none';
 
-    // Create downloadable text file
-    const blob = new Blob([data.translated], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(pdfBlob);
+    const filename = `cv-sven-bohnstedt-${targetLang}.pdf`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    availableLangs.push(targetLang);
+    // Update dropdown
+    const sel = document.getElementById('cv-target');
+    Array.from(sel.options).forEach(opt => {
+      if (opt.value === targetLang && !opt.text.startsWith('✓')) {
+        opt.text = '✓ ' + opt.text;
+      }
+    });
+
     result.innerHTML = `
-      <div style="background:#e8f8ef;border:1px solid #a3d9b8;padding:16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:13px;color:var(--green);font-weight:600;">CV auf ${targetLang.toUpperCase()} bereit</span>
-        <a href="${url}" download="cv-sven-bohnstedt-${targetLang}.txt" class="btn btn-green btn-sm">Herunterladen</a>
-      </div>
-      <p style="font-size:11px;color:var(--text-4);margin-top:8px;">Hinweis: Der Download ist als Textdatei — Formatierung nach Bedarf anpassen.</p>
-    `;
+      <div style="background:#e8f8ef;border:1px solid #a3d9b8;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <span style="font-size:12px;color:var(--green);font-weight:600;">✓ PDF bereit</span>
+        <a href="${url}" download="${filename}" class="btn btn-green btn-sm">Nochmals laden</a>
+      </div>`;
 
   } catch(err) {
-    addLog(`Fehler: ${err.message}`);
-    result.innerHTML = `<div style="background:#fdf0ef;border:1px solid #f0c0bc;padding:12px;font-size:13px;color:var(--red);">${err.message}</div>`;
+    if (progressInterval) clearInterval(progressInterval);
     fill.style.width = '100%';
     fill.style.background = 'var(--red)';
+    status.style.display = 'none';
+    result.innerHTML = `<div style="background:#fdf0ef;border:1px solid #f0c0bc;padding:12px;font-size:13px;color:var(--red);">${err.message}</div>`;
   }
 
   btn.disabled = false;
-  btn.textContent = 'CV übersetzen';
+  btn.textContent = 'Sprache laden / generieren';
+}
+
+async function changePassword() {
+  const current = document.getElementById('pw-current').value;
+  const newPw = document.getElementById('pw-new').value;
+  const newPw2 = document.getElementById('pw-new2').value;
+  const msg = document.getElementById('pw-msg');
+
+  msg.style.display = 'none';
+
+  if (!current || !newPw || !newPw2) {
+    showPwMsg('Bitte alle Felder ausfüllen.', 'error');
+    return;
+  }
+  if (newPw !== newPw2) {
+    showPwMsg('Neue Passwörter stimmen nicht überein.', 'error');
+    return;
+  }
+  if (newPw.length < 8) {
+    showPwMsg('Neues Passwort muss mindestens 8 Zeichen haben.', 'error');
+    return;
+  }
+
+  try {
+    // Re-authenticate with current password first
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { showPwMsg('Nicht angemeldet.', 'error'); return; }
+
+    // Verify current password by re-signing in
+    const { error: signInErr } = await sb.auth.signInWithPassword({
+      email: session.user.email,
+      password: current
+    });
+    if (signInErr) { showPwMsg('Aktuelles Passwort ist falsch.', 'error'); return; }
+
+    // Update to new password
+    const { error: updateErr } = await sb.auth.updateUser({ password: newPw });
+    if (updateErr) { showPwMsg(updateErr.message, 'error'); return; }
+
+    showPwMsg('Passwort erfolgreich geändert.', 'success');
+    document.getElementById('pw-current').value = '';
+    document.getElementById('pw-new').value = '';
+    document.getElementById('pw-new2').value = '';
+  } catch(e) {
+    showPwMsg(e.message, 'error');
+  }
+}
+
+function showPwMsg(text, type) {
+  const el = document.getElementById('pw-msg');
+  el.textContent = text;
+  el.style.display = 'block';
+  if (type === 'success') {
+    el.style.background = '#e8f8ef';
+    el.style.color = 'var(--green)';
+    el.style.border = '1px solid #a3d9b8';
+  } else {
+    el.style.background = '#fdf0ef';
+    el.style.color = 'var(--red)';
+    el.style.border = '1px solid #f0c0bc';
+  }
 }
 </script>
+
+<!-- MIA WALLACE CHAT WIDGET -->
+<style>
+  #mia-bubble { position:fixed;bottom:28px;right:28px;width:52px;height:52px;background:var(--text-2);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,0.25);z-index:1000;transition:transform 0.2s; }
+  #mia-bubble:hover { transform:scale(1.08); }
+  #mia-bubble span { font-family:"Instrument Serif",serif;font-size:22px;color:white;font-style:italic;line-height:1; }
+  #mia-panel { position:fixed;bottom:92px;right:28px;width:360px;height:500px;background:var(--surface);border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.15);z-index:999;display:none;flex-direction:column; }
+  #mia-panel.open { display:flex; }
+  #mia-header { background:var(--text-2);padding:14px 18px;display:flex;align-items:center;justify-content:space-between; }
+  #mia-header .mia-title { color:white;font-size:13px;font-weight:700;letter-spacing:0.06em; }
+  #mia-header .mia-sub { color:#8fafc8;font-size:11px; }
+  #mia-close { background:none;border:none;color:#8fafc8;cursor:pointer;font-size:18px;padding:0; }
+  #mia-messages { flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px; }
+  .mia-msg { max-width:85%;padding:10px 13px;font-size:13px;line-height:1.5; }
+  .mia-msg.bot { background:white;border:1px solid var(--border);align-self:flex-start;color:var(--text-2); }
+  .mia-msg.user { background:var(--blue);color:white;align-self:flex-end; }
+  .mia-slots { display:flex;flex-direction:column;gap:6px;margin-top:4px; }
+  .mia-slot { padding:8px 12px;background:#f0f6fd;border:1px solid var(--border);font-size:12px;cursor:pointer;color:var(--text-2); }
+  .mia-slot:hover { background:#daeaf8;border-color:#0078d4; }
+  #mia-input-row { padding:12px;border-top:1px solid var(--border);display:flex;gap:8px; }
+  #mia-input { flex:1;border:1px solid var(--border);padding:9px 12px;font-family:inherit;font-size:13px;color:var(--text);outline:none; }
+  #mia-input:focus { border-color:var(--blue); }
+  #mia-send { padding:9px 16px;background:var(--blue);color:white;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700; }
+  #mia-send:hover { background:var(--blue-dark); }
+  .mia-typing { color:var(--text-4);font-size:12px;font-style:italic;align-self:flex-start;padding:4px 8px; }
+</style>
+
+<div id="mia-bubble" onclick="toggleMia()" title="Termin mit Mia vereinbaren">
+  <span>M</span>
+</div>
+
+<div id="mia-panel">
+  <div id="mia-header">
+    <div>
+      <div class="mia-title">MIA WALLACE</div>
+      <div class="mia-sub">Terminassistentin · DAITA-CRAFTER</div>
+    </div>
+    <button id="mia-close" onclick="toggleMia()">✕</button>
+  </div>
+  <div id="mia-messages"></div>
+  <div id="mia-input-row">
+    <input id="mia-input" type="text" placeholder="Nachricht eingeben..." onkeydown="if(event.key==='Enter')sendMia()">
+    <button id="mia-send" onclick="sendMia()">→</button>
+  </div>
+</div>
+
+<script>
+let miaOpen = false;
+let miaHistory = [];
+let miaStarted = false;
+let miaSlots = [];
+let miaVisitor = {};
+let miaSessionId = (typeof crypto !== "undefined" && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+function toggleMia() {
+  miaOpen = !miaOpen;
+  document.getElementById('mia-panel').classList.toggle('open', miaOpen);
+  if (miaOpen && !miaStarted) { miaStarted = true; startMia(); }
+}
+
+function miaAddMsg(text, role, slots) {
+  const el = document.createElement('div');
+  el.className = 'mia-msg ' + (role === 'user' ? 'user' : 'bot');
+  el.textContent = text;
+  const msgs = document.getElementById('mia-messages');
+  msgs.appendChild(el);
+  if (slots && slots.length) {
+    miaSlots = slots;
+    const sd = document.createElement('div');
+    sd.className = 'mia-slots';
+    slots.forEach((s, i) => {
+      const btn = document.createElement('div');
+      btn.className = 'mia-slot';
+      btn.textContent = s.label;
+      btn.onclick = () => { pickSlot(s, btn); };
+      sd.appendChild(btn);
+    });
+    msgs.appendChild(sd);
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function miaTyping(show) {
+  let el = document.getElementById('mia-typing');
+  if (show && !el) {
+    el = document.createElement('div');
+    el.id = 'mia-typing';
+    el.className = 'mia-typing';
+    el.textContent = 'Mia tippt…';
+    document.getElementById('mia-messages').appendChild(el);
+  } else if (!show && el) { el.remove(); }
+  document.getElementById('mia-messages').scrollTop = 999999;
+}
+
+async function startMia() {
+  miaTyping(true);
+  const res = await fetch('/api/mia/chat', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ history: [], message: 'Hallo', sessionId: miaSessionId })
+  });
+  miaTyping(false);
+  const d = await res.json();
+  miaHistory = d.history || [];
+  miaAddMsg(d.reply, 'bot', d.slots);
+  if (d.action === 'give_up') miaGiveUp(d.reply);
+  if (d.action === 'done') miaDone();
+}
+
+async function sendMia() {
+  const input = document.getElementById('mia-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  miaAddMsg(msg, 'user');
+  miaHistory.push({role:'user', content: msg});
+  miaTyping(true);
+  try {
+    const res = await fetch('/api/mia/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ history: miaHistory, message: msg, sessionId: miaSessionId })
+    });
+    miaTyping(false);
+    const d = await res.json();
+    miaHistory = d.history || miaHistory;
+    // Extract visitor info from chat metadata if server provides it
+    if (d.visitor) Object.assign(miaVisitor, d.visitor);
+    miaAddMsg(d.reply, 'bot', d.slots);
+    if (d.action === 'book_now') { bookMia(); }
+    else if (d.action === 'give_up') { miaGiveUp(d.reply); }
+    else if (d.action === 'done') { miaDone(); }
+  } catch(e) {
+    miaTyping(false);
+    miaAddMsg('Entschuldigung, ein Fehler ist aufgetreten.', 'bot');
+  }
+}
+
+function pickSlot(slot, btn) {
+  // Disable all slot buttons immediately
+  document.querySelectorAll('.mia-slot').forEach(b => {
+    b.style.background = '#f5f5f5';
+    b.style.color = '#aaa';
+    b.style.cursor = 'not-allowed';
+    b.onclick = null;
+  });
+  btn.style.background = '#daeaf8';
+  btn.style.borderColor = '#0078d4';
+  btn.style.color = '#1e3a5f';
+  miaVisitor.slot = slot;
+  // Show selection in chat and book directly
+  miaAddMsg('Ich nehme ' + slot.label, 'user');
+  miaHistory.push({role:'user', content: 'Ich nehme ' + slot.label});
+  miaAddMsg('Perfekt! Ich buche jetzt Ihren Termin…', 'bot');
+  bookMia();
+}
+
+async function bookMia() {
+  const slot = miaVisitor.slot || miaSlots[0];
+  if (!slot) return;
+  try {
+    const r = await fetch('/api/mia/book', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        visitorName: miaVisitor.name || 'Unbekannt',
+        visitorEmail: miaVisitor.email || '',
+        company: miaVisitor.company || '',
+        concern: miaVisitor.concern || '',
+        slot: slot,
+        videoType: miaVisitor.videoType || 'meet',
+        sessionId: miaSessionId
+      })
+    });
+    const d = await r.json();
+    if (d.ok) { miaDone(); }
+    else if (d.error) { miaAddMsg('Buchungsfehler: ' + d.error, 'bot'); }
+    else { miaDone(); }
+  } catch(e) {
+    miaAddMsg('Buchung fehlgeschlagen — bitte versuchen Sie es erneut.', 'bot');
+    console.error('[bookMia] error:', e);
+  }
+}
+
+function miaGiveUp(msg) {
+  const el = document.createElement('div');
+  el.className = 'mia-msg bot';
+  el.innerHTML = (msg || 'Ich leite Sie an unser Kontaktformular weiter.') + ' <a href="/#kontakt" style="color:#0078d4;">Zum Kontaktformular →</a>';
+  document.getElementById('mia-messages').appendChild(el);
+  document.getElementById('mia-messages').scrollTop = 999999;
+  document.getElementById('mia-input').disabled = true;
+  document.getElementById('mia-send').disabled = true;
+}
+
+function miaDone() {
+  miaAddMsg('✅ Termin gebucht! Sie erhalten in Kürze eine Bestätigung per E-Mail.', 'bot');
+  document.getElementById('mia-input').disabled = true;
+  document.getElementById('mia-send').disabled = true;
+}
+
+setTimeout(() => {
+  if (document.getElementById('app').style.display !== 'none' && !miaOpen) {
+    toggleMia();
+  }
+}, 4000);
+</script>
+
 </body>
 </html>
-

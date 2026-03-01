@@ -1,62 +1,55 @@
-# daita-world
+# 🌍 daita-world
 
-Mono-Repo für alle daita-crafter Services, Infrastruktur und Webprojekte.
+> Mono-Repo für alle DAITA-CRAFTER Services, Apps und Infrastruktur.
+
+---
 
 ## Struktur
 
 ```
 daita-world/
 ├── apps/
-│   └── daita-web/          # hands.trembling-hands.com / daita-crafter.com
-│       ├── src/             # HTML, Blog, Assets (statische Seiten)
-│       ├── nginx/           # nginx config
-│       ├── ollama-bridge/   # Node.js Bridge (Übersetzung, Auth, CV)
-│       ├── cv/              # CV-Ablage (PDFs werden nicht versioniert)
-│       └── prompts/         # Claude Code Prompts für dieses Projekt
+│   ├── daita-web/      # Haupt-Website + statische Pages
+│   ├── mia/            # Mia Booking-Bot (Interview-Agent)
+│   ├── backoffice/     # Mia Backoffice-Dashboard
+│   ├── secretary/      # Kalender-Anonymisierung
+│   └── hp2.0/          # Next.js Relaunch (in dev)
+├── services/
+│   └── crm/            # Twenty CRM deployment config
 ├── infrastructure/
-│   ├── b07/                 # Contabo VPS (144.91.108.111) - PROD
-│   ├── hetzner/             # Hetzner Bare Metal (65.21.198.220) - DEV/WG-Hub
-│   └── wireguard/           # WireGuard Configs (ohne private keys)
-├── docs/                    # Architektur, Entscheidungen, Onboarding
-├── scripts/                 # Deploy- und Hilfsskripte
-└── .github/workflows/       # CI/CD
+│   ├── fcstp1910/      # fcstp1910 Server-Configs
+│   ├── hetzner/        # Hetzner WG-Gateway
+│   └── wireguard/      # WG-Configs (ohne private keys)
+├── docs/
+│   ├── adr/            # Architecture Decision Records
+│   └── architecture/   # Diagramme
+├── .github/workflows/  # CI/CD
+├── REPOS.md            # Alle Repos + Services im Überblick
+└── README.md
 ```
 
-## Branching
+## Kernservices
 
-| Branch | Zweck | Ziel |
-|--------|-------|------|
-| `main` | Production-ready | Deploy → b07 (144) |
-| `dev` | Integration | Hetzner Docker-VM |
-| `feature/*` | Feature-Entwicklung | → dev |
+| Service | URL | Stack |
+|---------|-----|-------|
+| **daita-crafter.com** | https://daita-crafter.com | Nginx + Static |
+| **Mia (Booking-Bot)** | /portal | Node.js + MLX Qwen2.5-14B |
+| **Backoffice** | /backoffice | Vanilla JS + FastAPI |
+| **Secretary** | intern :8302 | Python FastAPI |
+| **CRM** | crm.inranet.daita-crafter.com | Twenty (self-hosted) |
 
-## Deployment
+## Quick Links
+
+→ [Alle Repos & Status](REPOS.md)  
+→ [Deployment fcstp1910](infrastructure/fcstp1910/)  
+→ [ADRs](docs/adr/)
+
+## Deployments
 
 ```bash
-# Feature → Dev
-git checkout -b feature/mein-feature
-git push origin feature/mein-feature
-# PR → dev
+# fcstp1910 — daita-web + Mia
+ssh fcstp1910 "cd /opt/docker/daita-web && sudo docker compose up -d --build ollama-bridge"
 
-# Dev → Main (Production)
-git checkout main
-git merge dev
-git push origin main
-# GitHub Action deployed nach b07
+# secretary (10.200.0.22)
+systemctl --user restart secretary-api secretary-bridge secretary-sync
 ```
-
-## Services auf b07 (PROD)
-
-| Service | Port intern | URL |
-|---------|-------------|-----|
-| nginx/web | 8231 | https://hands.trembling-hands.com |
-| ollama-bridge | 3100 | /api/* |
-| plausible | 8230 | intern |
-
-## Infrastruktur
-
-- **b07** (Contabo, 144.91.108.111): PROD, öffentlich erreichbar, Cloudflare
-- **Hetzner** (65.21.198.220, Helsinki): WireGuard Hub, DEV, zugenagelt
-- **mac1** (10.200.0.11): Ollama – Qwen3-Coder-Next, llama3.1
-- **mac2** (10.200.0.12): Sprachmodelle, ComfyUI/SDXL
-- **WireGuard**: 10.200.0.0/24, Hub auf Hetzner

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mia Backoffice — DAITA-CRAFTER</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --bg2: #1a1d2e;
+  --bg3: #252840;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --green: #10b981;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --border: #2d3148;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; gap: 16px; }
+header h1 { font-size: 18px; font-weight: 600; }
+header span { color: var(--text2); font-size: 13px; }
+.badge { background: var(--accent); color: white; font-size: 11px; padding: 2px 8px; border-radius: 20px; }
+
+.container { padding: 32px; max-width: 1400px; margin: 0 auto; }
+
+/* TILES */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-bottom: 40px; }
+
+.tile { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.tile:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.15); }
+.tile-icon { font-size: 28px; margin-bottom: 12px; }
+.tile-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.tile-sub { font-size: 12px; color: var(--text2); }
+.tile-count { position: absolute; top: 16px; right: 16px; background: var(--accent); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; min-width: 24px; text-align: center; }
+.tile-count.yellow { background: var(--yellow); color: #000; }
+.tile-count.green { background: var(--green); }
+
+/* PANEL */
+.panel { display: none; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 0; overflow: hidden; }
+.panel.active { display: block; }
+.panel-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-header h2 { font-size: 16px; font-weight: 600; }
+.panel-close { background: none; border: none; color: var(--text2); cursor: pointer; font-size: 20px; padding: 4px; }
+.panel-close:hover { color: var(--text); }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--bg3); padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg3); }
+
+.status { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+.status.new { background: rgba(99,102,241,0.2); color: var(--accent2); }
+.status.researched { background: rgba(16,185,129,0.2); color: var(--green); }
+.status.crm { background: rgba(245,158,11,0.2); color: var(--yellow); }
+.status.done { background: rgba(16,185,129,0.1); color: var(--text2); }
+
+.btn { padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.15s; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent2); }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text2); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* DETAIL MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; width: 680px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+.modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
+.modal-body { padding: 24px; }
+.modal-section { margin-bottom: 24px; }
+.modal-section h3 { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { background: var(--bg3); border-radius: 8px; padding: 12px; }
+.field-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.field-value { font-size: 14px; font-weight: 500; }
+.research-box { background: var(--bg3); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; color: var(--text2); }
+.research-box.loading { display: flex; align-items: center; gap: 10px; }
+.spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.log { font-size: 11px; color: var(--text2); font-family: monospace; background: var(--bg3); padding: 12px; border-radius: 6px; line-height: 1.8; }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 60px 24px; color: var(--text2); }
+.empty .icon { font-size: 40px; margin-bottom: 16px; }
+
+/* Notification */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; font-size: 13px; z-index: 200; transform: translateY(100px); opacity: 0; transition: all 0.3s; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--green); }
+.toast.error { border-color: var(--red); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>🤖</div>
+  <h1>Mia Backoffice</h1>
+  <span>DAITA-CRAFTER</span>
+  <div class="badge">live</div>
+  <div style="flex:1"></div>
+  <span id="lastUpdate" style="font-size:12px;color:var(--text2)">–</span>
+</header>
+
+<div class="container">
+
+  <!-- TILES -->
+  <div class="tiles">
+    <div class="tile" onclick="showPanel('bookings')">
+      <div class="tile-icon">📅</div>
+      <div class="tile-count yellow" id="tile-new">0</div>
+      <div class="tile-title">Neue Buchungen</div>
+      <div class="tile-sub">Wartend auf Bearbeitung</div>
+    </div>
+    <div class="tile" onclick="showPanel('leads')">
+      <div class="tile-icon">🎯</div>
+      <div class="tile-count" id="tile-leads">0</div>
+      <div class="tile-title">CRM Leads</div>
+      <div class="tile-sub">In Twenty eingetragen</div>
+    </div>
+    <div class="tile" onclick="showPanel('research')">
+      <div class="tile-icon">🔍</div>
+      <div class="tile-count green" id="tile-research">0</div>
+      <div class="tile-title">Recherchen</div>
+      <div class="tile-sub">Unternehmen analysiert</div>
+    </div>
+    <div class="tile" onclick="showPanel('calendar')">
+      <div class="tile-icon">🗓️</div>
+      <div class="tile-count" id="tile-cal">0</div>
+      <div class="tile-title">Termine heute</div>
+      <div class="tile-sub">Google Calendar</div>
+    </div>
+    <div class="tile" onclick="showPanel('all')">
+      <div class="tile-icon">📋</div>
+      <div class="tile-count" id="tile-all">0</div>
+      <div class="tile-title">Alle Buchungen</div>
+      <div class="tile-sub">Gesamtübersicht</div>
+    </div>
+    <div class="tile" style="opacity:0.5;cursor:default">
+      <div class="tile-icon">🏨</div>
+      <div class="tile-title">Hotel & Bahn</div>
+      <div class="tile-sub" style="color:var(--yellow)">Backlog</div>
+    </div>
+  </div>
+
+  <!-- PANEL -->
+  <div class="panel active" id="panel-bookings">
+    <div class="panel-header">
+      <h2>📅 Neue Buchungen</h2>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <table id="table-bookings">
+      <thead><tr>
+        <th>Name</th><th>Unternehmen</th><th>Jobtitel</th><th>Termin</th><th>Status</th><th>Aktionen</th>
+      </tr></thead>
+      <tbody id="tbody-bookings">
+        <tr><td colspan="6"><div class="empty"><div class="icon">📭</div>Keine neuen Buchungen</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel" id="panel-leads">
+    <div class="panel-header">
+      <h2>🎯 CRM Leads</h2>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Unternehmen</th><th>Email</th><th>Thema</th><th>CRM Status</th></tr></thead>
+      <tbody id="tbody-leads">
+        <tr><td colspan="5"><div class="empty"><div class="icon">🎯</div>Keine Leads</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel" id="panel-research">
+    <div class="panel-header">
+      <h2>🔍 Recherchen</h2>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div id="research-list" style="padding:24px">
+      <div class="empty"><div class="icon">🔍</div>Keine Recherchen</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-calendar">
+    <div class="panel-header">
+      <h2>🗓️ Termine heute</h2>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div id="calendar-list" style="padding:24px">
+      <div class="empty"><div class="icon">🗓️</div>Wird geladen…</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-all">
+    <div class="panel-header">
+      <h2>📋 Alle Buchungen</h2>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Email</th><th>Unternehmen</th><th>Jobtitel</th><th>Thema</th><th>Termin</th><th>Video</th><th>Status</th></tr></thead>
+      <tbody id="tbody-all">
+        <tr><td colspan="8"><div class="empty"><div class="icon">📋</div>Keine Buchungen</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div style="font-size:18px;font-weight:700" id="modal-name">–</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:4px" id="modal-company">–</div>
+      </div>
+      <button class="panel-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h3>Kontakt</h3>
+        <div class="field-grid">
+          <div class="field"><div class="field-label">Email</div><div class="field-value" id="m-email">–</div></div>
+          <div class="field"><div class="field-label">Jobtitel</div><div class="field-value" id="m-jobtitle">–</div></div>
+          <div class="field"><div class="field-label">Thema</div><div class="field-value" id="m-concern">–</div></div>
+          <div class="field"><div class="field-label">Termin</div><div class="field-value" id="m-slot">–</div></div>
+          <div class="field"><div class="field-label">Video</div><div class="field-value" id="m-video">–</div></div>
+          <div class="field"><div class="field-label">Status</div><div class="field-value" id="m-status">–</div></div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <h3>Unternehmens-Recherche</h3>
+        <div class="research-box" id="m-research">Noch keine Recherche</div>
+      </div>
+      <div class="modal-section">
+        <h3>Aktionen</h3>
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-research" onclick="runResearch()">🔍 Recherche starten</button>
+          <button class="btn btn-primary" id="btn-crm" onclick="pushToCRM()">🎯 In CRM eintragen</button>
+          <button class="btn btn-ghost" onclick="closeModal()">Schließen</button>
+        </div>
+      </div>
+      <div class="modal-section">
+        <h3>Log</h3>
+        <div class="log" id="m-log">–</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api/backoffice';
+let bookings = [];
+let currentBooking = null;
+
+async function load() {
+  try {
+    const r = await fetch(`${API}/bookings`);
+    bookings = await r.json();
+    renderAll();
+    document.getElementById('lastUpdate').textContent = 'Aktualisiert: ' + new Date().toLocaleTimeString('de-DE');
+  } catch(e) {
+    console.warn('Backend nicht erreichbar, Demo-Daten');
+    bookings = DEMO;
+    renderAll();
+  }
+}
+
+function renderAll() {
+  const newOnes = bookings.filter(b => b.status === 'new');
+  const leads = bookings.filter(b => b.crm_id);
+  const researched = bookings.filter(b => b.research);
+
+  document.getElementById('tile-new').textContent = newOnes.length;
+  document.getElementById('tile-leads').textContent = leads.length;
+  document.getElementById('tile-research').textContent = researched.length;
+  document.getElementById('tile-all').textContent = bookings.length;
+
+  // Bookings table
+  const tbody = document.getElementById('tbody-bookings');
+  if (newOnes.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="icon">📭</div>Keine neuen Buchungen</div></td></tr>';
+  } else {
+    tbody.innerHTML = newOnes.map(b => `
+      <tr onclick="openModal('${b.id}')" style="cursor:pointer">
+        <td><strong>${b.visitor_name}</strong></td>
+        <td>${b.company || '–'}</td>
+        <td><span style="color:var(--text2)">${b.job_title || '–'}</span></td>
+        <td>${b.slot_label || '–'}</td>
+        <td><span class="status new">Neu</span></td>
+        <td><div class="actions">
+          <button class="btn btn-primary" onclick="event.stopPropagation();runResearchFor('${b.id}')">🔍</button>
+          <button class="btn btn-ghost" onclick="event.stopPropagation();pushToCRMFor('${b.id}')">🎯 CRM</button>
+        </div></td>
+      </tr>`).join('');
+  }
+
+  // All table
+  const tbodyAll = document.getElementById('tbody-all');
+  tbodyAll.innerHTML = bookings.length === 0
+    ? '<tr><td colspan="8"><div class="empty"><div class="icon">📋</div>Keine Buchungen</div></td></tr>'
+    : bookings.map(b => `
+      <tr onclick="openModal('${b.id}')" style="cursor:pointer">
+        <td><strong>${b.visitor_name}</strong></td>
+        <td style="font-size:12px;color:var(--text2)">${b.visitor_email}</td>
+        <td>${b.company || '–'}</td>
+        <td>${b.job_title || '–'}</td>
+        <td>${b.concern || '–'}</td>
+        <td>${b.slot_label || '–'}</td>
+        <td>${b.video_type === 'teams' ? '🟦 Teams' : '🟢 Meet'}</td>
+        <td><span class="status ${b.status}">${b.status}</span></td>
+      </tr>`).join('');
+
+  // Leads
+  const tbodyLeads = document.getElementById('tbody-leads');
+  tbodyLeads.innerHTML = leads.length === 0
+    ? '<tr><td colspan="5"><div class="empty"><div class="icon">🎯</div>Keine Leads</div></td></tr>'
+    : leads.map(b => `
+      <tr onclick="openModal('${b.id}')" style="cursor:pointer">
+        <td><strong>${b.visitor_name}</strong></td>
+        <td>${b.company}</td>
+        <td style="font-size:12px">${b.visitor_email}</td>
+        <td>${b.concern}</td>
+        <td><span class="status crm">In CRM ✓</span></td>
+      </tr>`).join('');
+}
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const p = document.getElementById('panel-' + name);
+  if (p) p.classList.add('active');
+}
+function closePanel() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+}
+
+function openModal(id) {
+  currentBooking = bookings.find(b => b.id === id);
+  if (!currentBooking) return;
+  const b = currentBooking;
+  document.getElementById('modal-name').textContent = b.visitor_name;
+  document.getElementById('modal-company').textContent = b.company + (b.job_title ? ` · ${b.job_title}` : '');
+  document.getElementById('m-email').textContent = b.visitor_email;
+  document.getElementById('m-jobtitle').textContent = b.job_title || '–';
+  document.getElementById('m-concern').textContent = b.concern || '–';
+  document.getElementById('m-slot').textContent = b.slot_label || '–';
+  document.getElementById('m-video').textContent = b.video_type === 'teams' ? '🟦 Microsoft Teams' : '🟢 Google Meet';
+  document.getElementById('m-status').textContent = b.status;
+  document.getElementById('m-research').textContent = b.research || 'Noch keine Recherche durchgeführt.';
+  document.getElementById('m-log').textContent = (b.log || []).join('\n') || '–';
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  currentBooking = null;
+}
+
+async function runResearch() { if (currentBooking) await runResearchFor(currentBooking.id); }
+async function runResearchFor(id) {
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('m-research').innerHTML = '<div class="loading"><div class="spinner"></div>Recherche läuft…</div>';
+  try {
+    const r = await fetch(`${API}/research`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ booking_id: id, company: b.company, name: b.visitor_name, email: b.visitor_email })
+    });
+    const d = await r.json();
+    b.research = d.summary;
+    b.status = 'researched';
+    document.getElementById('m-research').textContent = d.summary;
+    toast('Recherche abgeschlossen ✓', 'success');
+    renderAll();
+  } catch(e) { toast('Fehler: ' + e.message, 'error'); }
+}
+
+async function pushToCRM() { if (currentBooking) await pushToCRMFor(currentBooking.id); }
+async function pushToCRMFor(id) {
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+  try {
+    const r = await fetch(`${API}/crm`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ booking_id: id })
+    });
+    const d = await r.json();
+    b.crm_id = d.crm_id;
+    b.status = 'crm';
+    toast('Lead in CRM eingetragen ✓', 'success');
+    renderAll();
+  } catch(e) { toast('Fehler: ' + e.message, 'error'); }
+}
+
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// Demo data for when API not reachable
+const DEMO = [
+  { id: '1', visitor_name: 'Max Mustermann', visitor_email: 'max@example.de', company: 'Muster GmbH', job_title: 'Head of Data', concern: 'Data Warehouse Migration', slot_label: 'Dienstag, 3. März — 14:00 Uhr', video_type: 'meet', status: 'new', research: '', crm_id: null, log: ['2026-03-01 10:00: Buchung eingegangen'] },
+  { id: '2', visitor_name: 'Anna Schmidt', visitor_email: 'a.schmidt@firma.de', company: 'Tech AG', job_title: 'CTO', concern: 'MLX Setup', slot_label: 'Mittwoch, 4. März — 10:00 Uhr', video_type: 'teams', status: 'researched', research: 'Tech AG ist ein mittelständisches IT-Unternehmen aus München, gegründet 2015. Schwerpunkte: Cloud-Migration, Data Engineering. ~200 MA.', crm_id: null, log: ['2026-03-01 09:00: Buchung', '2026-03-01 09:05: Recherche'] },
+];
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
